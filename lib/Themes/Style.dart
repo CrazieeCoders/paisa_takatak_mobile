@@ -86,7 +86,6 @@ class Style{
       color: Colors.black,
       decoration: TextDecoration.none
   );
-
   static final TextStyle descTextStyle = TextStyle(
       fontFamily: 'Roboto',
       fontSize: 12.0,
@@ -99,14 +98,11 @@ class Style{
       color: Color(0xFF4F4F4F),
       decoration: TextDecoration.none
   );
-
   static final TextStyle desc2TextStyle = TextStyle(
       fontFamily: 'Roboto',
       fontSize: 14.0,
       color: Color(0xFF828282)
   );
-
-
   static final TextStyle hintTextStyle =  TextStyle(
       fontFamily: 'Roboto',
       fontSize: 10.0,
@@ -126,11 +122,23 @@ class Style{
     color: Color(0xFF262222),
   );
 
+  static final TextStyle checkBoxTextStyle =  TextStyle(
+      fontFamily: 'Roboto',
+      fontSize: 12.0,
+      color: Color(0xFF1B1C77)
+  );
+
 
   static final TextStyle input1TextStyle =  TextStyle(
   fontFamily: 'Roboto Bold',
   fontSize: 28.0,
   color: Color(0xFF4F4F4F)
+  );
+
+  static final TextStyle input2TextStyle = TextStyle(
+      fontFamily: 'Roboto Bold',
+      fontSize: 16.0,
+      color: Color(0xFF262222)
   );
 
   static final InputDecoration otpInputDecoration = InputDecoration(

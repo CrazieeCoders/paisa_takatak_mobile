@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:paisa_takatak_mobile/ui/loan_agreement.dart';
+import 'package:paisa_takatak_mobile/ui/loan_confirmation.dart';
 import 'package:paisa_takatak_mobile/ui/loan_form.dart';
 import 'package:paisa_takatak_mobile/ui/poi_page.dart';
 import 'package:paisa_takatak_mobile/ui/signup_page.dart';
@@ -21,12 +23,13 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       routes: {
-        '/':(context) =>LoanForm(),
-        //'/':(context) =>SplashPage(),
+        '/':(context) =>SplashPage(),
         '/signUp':(context) => SignUpPage(),
         '/verifyOtp':(context) => VerifyOtp(),
         '/poiPage':(context) =>POIPage(),
         '/loanForm':(context) =>LoanForm(),
+         '/loanAgreement':(context) =>LoanAgreementForm(),
+        '/loanConfirmation':(context) =>LoanConfirmation(),
       },
 
     );

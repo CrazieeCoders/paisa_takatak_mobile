@@ -3,7 +3,7 @@ import 'package:permission_handler/permission_handler.dart';
 class PermissionsService{
 
 
-   checkPermission() async{
+   Future<bool> checkPermission() async{
 
     Map<Permission,PermissionStatus> statuses = await [
       Permission.camera,
@@ -21,8 +21,7 @@ class PermissionsService{
       }
 
     }
-
-
+   return false;
   }
 
 

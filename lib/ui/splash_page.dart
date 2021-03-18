@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:paisa_takatak_mobile/Themes/Style.dart';
 
 class SplashPage extends StatelessWidget {
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(

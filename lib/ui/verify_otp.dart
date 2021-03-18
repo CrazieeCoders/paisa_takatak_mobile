@@ -1,18 +1,37 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:paisa_takatak_mobile/Themes/Style.dart';
+import 'package:paisa_takatak_mobile/Widgets/countDown_Timer.dart';
 import 'package:paisa_takatak_mobile/model/arguments.dart';
-import 'package:pin_entry_text_field/pin_entry_text_field.dart';
 
 
-class VerifyOtp extends StatefulWidget {
+class VerifyOtp extends StatefulWidget{
   @override
   _VerifyOtpState createState() => _VerifyOtpState();
 }
 
-class _VerifyOtpState extends State<VerifyOtp> {
+class _VerifyOtpState extends State<VerifyOtp> with TickerProviderStateMixin{
+
+  AnimationController _controller;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _controller = AnimationController(vsync: this,
+    duration: Duration(minutes: 3),
+    );
+    _controller.forward();
+
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,36 +109,30 @@ class _VerifyOtpState extends State<VerifyOtp> {
                         height: 15.0,
                       ),
 
-
                       Center(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text('Resend OTP :',
                             style: Style.descTextStyle,),
-                          /*  TweenAnimationBuilder(
-                                tween: Tween(begin: 180.0,end: 0.0),
-                                duration: Duration(
-                                  minutes: 3
-                                ), builder: (context,value,child)=>Text('${value.toInt()}',
-                            style: Style.descTextStyle,
-                            )),*/
+                            Countdown(
+                             animation: StepTween(
+                               begin: 3 * 60,
+                               end: 0,
+                             ).animate(_controller),
+                            ),
                           ],
                         ),
                       ),
-
-
-
                       SizedBox(
                         height: 95.0,
                       ),
-
                       Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: GestureDetector(
                           onTap: (){
                             //startTime();
-                            Navigator.pushNamedAndRemoveUntil(context,'/poiPage', (route) => false);
+                            Navigator.pushNamedAndRemoveUntil(context,'/loanForm', (route) => false);
 
                           },
                           child: Container(
@@ -164,6 +177,11 @@ class _OtpFormState extends State<OtpForm> {
   FocusNode pin3FocusNode;
   FocusNode pin4FocusNode;
 
+  TextEditingController pin1Controller = TextEditingController();
+  TextEditingController pin2Controller = TextEditingController();
+  TextEditingController pin3Controller = TextEditingController();
+  TextEditingController pin4Controller = TextEditingController();
+
 
   @override
   void initState() {
@@ -200,6 +218,7 @@ class _OtpFormState extends State<OtpForm> {
           SizedBox(
             width: 50,
             child: TextFormField(
+              controller: pin1Controller,
               autofocus: true,
               style: TextStyle(fontSize: 20.0,),
               textAlign: TextAlign.center,
@@ -213,6 +232,7 @@ class _OtpFormState extends State<OtpForm> {
           SizedBox(
             width: 50,
             child: TextFormField(
+              controller: pin2Controller,
               focusNode: pin2FocusNode,
               style: TextStyle(fontSize: 20.0,),
               textAlign: TextAlign.center,
@@ -226,6 +246,7 @@ class _OtpFormState extends State<OtpForm> {
           SizedBox(
             width: 50,
             child: TextFormField(
+              controller: pin3Controller,
               focusNode: pin3FocusNode,
               style: TextStyle(fontSize: 20.0,),
               textAlign: TextAlign.center,
@@ -239,6 +260,7 @@ class _OtpFormState extends State<OtpForm> {
           SizedBox(
             width: 50,
             child: TextFormField(
+              controller: pin4Controller,
               focusNode: pin4FocusNode,
               style: TextStyle(fontSize: 20.0,),
               textAlign: TextAlign.center,

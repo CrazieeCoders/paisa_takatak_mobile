@@ -294,7 +294,31 @@ class _POIPageState extends State<POIPage> {
               ),
             ),
           ),
-        )
+        ),
+
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: GestureDetector(
+            onTap: (){
+              Navigator.pushNamedAndRemoveUntil(context,'/loanAgreement', (route) => false);
+
+            },
+            child: Container(
+              height: 50.0,
+              width: 296.0,
+              decoration: BoxDecoration(
+                  color: Style.inkBlueColor,
+                  borderRadius: BorderRadius.circular(5.0)
+              ),
+              child: Center(child: Text('Done',
+                style: Style.button2TextStyle,
+              ),
+
+              ),
+            ),
+          ),
+        ),
+
       ],
     );
   }
