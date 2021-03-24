@@ -7,7 +7,9 @@ import 'package:paisa_takatak_mobile/ui/signup_page.dart';
 import 'package:paisa_takatak_mobile/ui/splash_page.dart';
 import 'package:paisa_takatak_mobile/ui/verify_otp.dart';
 
-void main() {
+
+  main() {
+
   runApp(MyApp());
 }
 
@@ -24,9 +26,9 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         '/':(context) =>SplashPage(),
-        '/signUp':(context) => SignUpPage(),
+        '/signUp':(context) => SignUpPageProvider(),
         '/verifyOtp':(context) => VerifyOtp(),
-        '/poiPage':(context) =>POIPage(),
+        '/poiPage':(context) =>POIPageProvider(),
         '/loanForm':(context) =>LoanForm(),
          '/loanAgreement':(context) =>LoanAgreementForm(),
         '/loanConfirmation':(context) =>LoanConfirmation(),

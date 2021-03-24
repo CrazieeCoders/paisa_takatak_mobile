@@ -1,11 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paisa_takatak_mobile/Exception/custom_exception.dart';
 import 'package:paisa_takatak_mobile/Themes/Style.dart';
+import 'package:paisa_takatak_mobile/Widgets/loading_Indicator.dart';
+import 'package:paisa_takatak_mobile/bloc/signUp_bloc/signUp_Bloc.dart';
+import 'package:paisa_takatak_mobile/bloc/signUp_bloc/signUp_events.dart';
+import 'package:paisa_takatak_mobile/bloc/signUp_bloc/signUp_states.dart';
 import 'package:paisa_takatak_mobile/model/arguments.dart';
 import 'package:paisa_takatak_mobile/services/api_services.dart';
 import 'package:paisa_takatak_mobile/services/permission_service.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
+
+
+class SignUpPageProvider extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider<SignUpBloc>(
+      create: (context)=>SignUpBloc(),
+        child: SignUpPage());
+  }
+}
+
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -13,12 +30,15 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+
   PermissionsService permissionsService = PermissionsService();
   TextEditingController _phTextController = TextEditingController();
+  FocusNode _phTextFocus;
+  SignUpBloc _signUpBloc;
 
   final _formKey = GlobalKey<FormState>();
   bool isPermissionGiven = false;
-  APIService apiService = APIService();
+
 
   getPermissions() async {
     isPermissionGiven = await permissionsService.checkPermission();
@@ -29,10 +49,21 @@ class _SignUpPageState extends State<SignUpPage> {
     // TODO: implement initState
     super.initState();
     getPermissions();
+    _phTextFocus = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _phTextFocus.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+
+    _signUpBloc = BlocProvider.of<SignUpBloc>(context);
+
     return Scaffold(
       appBar: AppBar(
         title:  Text('',
@@ -41,152 +72,162 @@ class _SignUpPageState extends State<SignUpPage> {
         backgroundColor: Style.paleYellow,
         elevation: 0.0,
       ),
-      body: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Style.paleYellow,
-                    Style.palePurple,
-                  ]),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
-            child: Container(
-              width: 400,
-              height: 720,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5.0),
-                color: Colors.white,
-              ),
-              child: ListView(
+      body: BlocListener<SignUpBloc,OtpState>(
+        listener: (context,state){
+          if(state is SendOtpState){
+            LoadingDialog.hide(context);
+            Navigator.pushNamed(context,
+                '/verifyOtp',
+                arguments: Arguments(
+                    phoneNo: state.sendOtp));
+          }else if(state is OtpErrorState){
+            LoadingDialog.hide(context);
+            Fluttertoast.showToast(msg: state.errMsg,
+            toastLength: Toast.LENGTH_LONG
+            );
+          }else if(state is OtpLoadingState){
+            LoadingDialog.show(context);
+          }else{
+            LoadingDialog.hide(context);
+          }
+        },
+        child: BlocBuilder<SignUpBloc,OtpState>(
+          builder: (context,state){
+              return Stack(
                 children: [
-                  SizedBox(
-                    height: 56.0,
-                  ),
                   Container(
-                    height: 336,
-                    width: 265,
-                    child: Image.asset('cutouts/enter-mobile/banner@1x.png'),
-                  ),
-                  SizedBox(
-                    height: 50.0,
-                  ),
-                  Center(
-                    child: Text('Please enter your Mobile number to continue',
-                      style: Style.textStyle1,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Style.paleYellow,
+                            Style.palePurple,
+                          ]),
                     ),
                   ),
-                  SizedBox(
-                    height: 60.0,
-                  ),
-
-                  Form(
-                    key: _formKey,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 32.0,right: 32.0),
-                      child: Card(
-                        elevation: 1.0,
-                        child: Container(
-                          height: 56.5,
-                          width: 236.0,
-                          child: TextFormField(
-                            controller: _phTextController,
-                            keyboardType: TextInputType.phone,
-                            style: Style.phoneTextStyle,
-                            inputFormatters: [
-                              new LengthLimitingTextInputFormatter(10),
-                            ],
-                            decoration: InputDecoration(
-                                contentPadding: EdgeInsets.all(5.0),
-                                prefixText: "+91 |  ",
-                                prefixStyle: Style.prefixTextStyle,
-                                border: InputBorder.none
-                            ),
-                            validator: (phNo){
-                              if(phNo.length != 10){
-                                return "Please enter valid Phone Number";
-                              }
-                              return null;
-                            },
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+                    child: Container(
+                      width: 400,
+                      height: 720,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5.0),
+                        color: Colors.white,
+                      ),
+                      child: ListView(
+                        children: [
+                          SizedBox(
+                            height: 56.0,
                           ),
-                        ),
+                          Container(
+                            height: 336,
+                            width: 265,
+                            child: Image.asset('cutouts/enter-mobile/banner@1x.png'),
+                          ),
+                          SizedBox(
+                            height: 50.0,
+                          ),
+                          Center(
+                            child: Text('Please enter your Mobile number to continue',
+                              style: Style.textStyle1,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 60.0,
+                          ),
+
+                          Form(
+                            key: _formKey,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 32.0,right: 32.0),
+                              child: Card(
+                                elevation: 1.0,
+                                child: Container(
+                                  height: 56.5,
+                                  width: 236.0,
+                                  child: TextFormField(
+                                    controller: _phTextController,
+                                    focusNode: _phTextFocus,
+                                    keyboardType: TextInputType.phone,
+                                    style: Style.phoneTextStyle,
+                                    inputFormatters: [
+                                      new LengthLimitingTextInputFormatter(10),
+                                    ],
+                                    decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.all(5.0),
+                                        prefixText: "+91 |  ",
+                                        prefixStyle: Style.prefixTextStyle,
+                                        border: InputBorder.none
+                                    ),
+                                    onChanged: (value){
+                                      if(value.length == 10){
+                                        _phTextFocus.unfocus();
+                                      }
+                                    },
+                                    validator: (phNo){
+
+                                      if(phNo.length != 10){
+                                        return "Please enter valid Phone Number";
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 75.5,
+                          ),
+
+                          GestureDetector(
+                            onTap: ()async{
+                              if(_formKey.currentState.validate()) {
+
+                                if (_phTextController.text.length == 10) {
+                                  if (isPermissionGiven) {
+
+                                    _signUpBloc.add(SendOtpEvent(phNo: _phTextController.text));
+
+                                    _phTextController.clear();
+
+                                  } else {
+                                    getPermissions();
+                                  }
+                                }
+
+
+                              }
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(left:38.0,right: 38.0),
+                              child: Container(
+                                height: 50.0,
+                                width: 296.0,
+                                decoration: BoxDecoration(
+                                    color: Style.inkBlueColor,
+                                    borderRadius: BorderRadius.circular(5.0)
+                                ),
+                                child: Center(child: Text('Continue',
+                                  style: Style.button2TextStyle,
+                                ),
+
+                                ),
+                              ),
+                            ),
+                          ),
+
+                        ],
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 75.5,
-                  ),
-
-                  GestureDetector(
-                    onTap: ()async{
-                      if(_formKey.currentState.validate()) {
-
-                           if (_phTextController.text.length == 10) {
-                             if (isPermissionGiven) {
-
-
-                               try {
-                            //    await apiService.generateOtp(_phTextController.text);
-
-                                 Navigator.pushNamed(context,
-                                     '/verifyOtp',
-                                     arguments: Arguments(
-                                         phoneNo: _phTextController.text));
-                                 _phTextController.clear();
-
-                               }catch(e){
-                                 print('Came inside catch bloc');
-                                 if(e is ModelException){
-                                   Fluttertoast.showToast(msg: 'Model Exception');
-                                 }else if(e is ForbiddenException){
-                                   Fluttertoast.showToast(msg: 'Forbidden Url Site');
-                                 }else if(e is UnAuthorizedException){
-                                   Fluttertoast.showToast(msg: 'UnAuthorized Site');
-                                 }else if(e is FetchOtpException){
-                                   Fluttertoast.showToast(msg: 'Unable to communicate with server');
-                                 }else if (e is NotFoundException){
-                                   Fluttertoast.showToast(msg:'Url not found');
-                                 }else{
-                                   Fluttertoast.showToast(msg:'Unable to communicate with server');
-                                 }
-                               }
-
-                             } else {
-                               getPermissions();
-                             }
-                           }
-
-
-                         }
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(left:38.0,right: 38.0),
-                      child: Container(
-                        height: 50.0,
-                        width: 296.0,
-                        decoration: BoxDecoration(
-                            color: Style.inkBlueColor,
-                            borderRadius: BorderRadius.circular(5.0)
-                        ),
-                        child: Center(child: Text('Continue',
-                          style: Style.button2TextStyle,
-                        ),
-
-                        ),
-                      ),
-                    ),
-                  ),
-
                 ],
-              ),
-            ),
-          ),
-        ],
+              );
+
+          },
+
+        ),
       ),
     );
   }

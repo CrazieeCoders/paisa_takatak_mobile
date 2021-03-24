@@ -50,6 +50,10 @@
      <!-- Permission options for the `photos` group -->
          <key>NSPhotoLibraryUsageDescription</key>
          <string>photos</string>
-
 </dict>
+      <key>NSAppTransportSecurity</key>
+      <dict>
+         <key>NSAllowsArbitraryLoads</key>
+         <true/>
+       </dict>
 </plist>

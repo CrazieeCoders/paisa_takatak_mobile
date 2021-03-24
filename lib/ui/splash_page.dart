@@ -24,16 +24,21 @@ class SplashPage extends StatelessWidget {
            Positioned(
              bottom: 16.0,
              right: 36.0,
-             child: Container(
-               height: 50.0,
-               width: 156,
-               decoration: BoxDecoration(
-                 color: Style.inkBlueColor,
-                 borderRadius: BorderRadius.circular(5.0),
-               ),
-               child: Center(
-                 child: Text('Login',
-                style:Style.button2TextStyle
+             child: GestureDetector(
+               onTap: (){
+                 Navigator.pushNamedAndRemoveUntil(context,'/signUp', (route) => false);
+               },
+               child: Container(
+                 height: 50.0,
+                 width: 156,
+                 decoration: BoxDecoration(
+                   color: Style.inkBlueColor,
+                   borderRadius: BorderRadius.circular(5.0),
+                 ),
+                 child: Center(
+                   child: Text('Login',
+                  style:Style.button2TextStyle
+                   ),
                  ),
                ),
              ),
