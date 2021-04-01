@@ -14,4 +14,15 @@ class AddAadhaarBackEvent extends AadhaarBackEvent{
 }
 
 
+class CheckAadhaarBackEvent extends AadhaarBackEvent{
+
+  CheckAadhaarBackEvent();
+  @override
+  // TODO: implement props
+  List<Object> get props =>[];
+}
+
+
+
+
 

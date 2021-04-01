@@ -1,23 +1,23 @@
 import 'package:equatable/equatable.dart';
 
-abstract class POIPOAState extends Equatable{}
+abstract class SelfieState extends Equatable{}
 
 
 
-class PoiInitialstate extends POIPOAState{
+class SelfieInitialstate extends SelfieState{
   @override
   // TODO: implement props
   List<Object> get props =>[];
 
 }
 
-class SelfieSuccessState extends POIPOAState{
+class SelfieSuccessState extends SelfieState{
   @override
   // TODO: implement props
   List<Object> get props =>[];
 }
 
-class SelfieFailureState extends POIPOAState{
+class SelfieFailureState extends SelfieState{
   @override
   // TODO: implement props
   List<Object> get props =>[];
@@ -25,7 +25,7 @@ class SelfieFailureState extends POIPOAState{
 }
 
 
-class SelfieLoadingState extends POIPOAState{
+class SelfieLoadingState extends SelfieState{
   @override
   // TODO: implement props
   List<Object> get props =>[];

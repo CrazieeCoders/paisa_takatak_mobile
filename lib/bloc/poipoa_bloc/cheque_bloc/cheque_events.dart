@@ -14,4 +14,13 @@ class AddChequeEvent extends ChequeEvent{
 }
 
 
+class CheckChequeEvent extends ChequeEvent{
+
+  CheckChequeEvent();
+  @override
+  // TODO: implement props
+  List<Object> get props =>[];
+}
+
+
 

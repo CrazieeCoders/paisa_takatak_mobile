@@ -1,13 +1,13 @@
 import 'package:equatable/equatable.dart';
 
-abstract class OtpEvent extends Equatable{}
+abstract class AgreementOtpEvent extends Equatable{}
 
 
-class SendOtpEvent extends OtpEvent{
+class AgreementSendOtpEvent extends AgreementOtpEvent{
 
   String phNo;
 
-  SendOtpEvent({this.phNo});
+  AgreementSendOtpEvent({this.phNo});
 
   @override
   // TODO: implement props
@@ -15,11 +15,11 @@ class SendOtpEvent extends OtpEvent{
 }
 
 
-class VerifyOtpEvent extends OtpEvent{
+class AgreementVerifyOtpEvent extends AgreementOtpEvent{
 
   String pin,phNo;
 
-  VerifyOtpEvent({this.pin,this.phNo});
+  AgreementVerifyOtpEvent({this.pin,this.phNo});
 
   @override
   // TODO: implement props
@@ -28,11 +28,11 @@ class VerifyOtpEvent extends OtpEvent{
 }
 
 
-class ResendOtpEvent extends OtpEvent{
+class AgreementResendOtpEvent extends AgreementOtpEvent{
 
   String phNo;
 
-  ResendOtpEvent({this.phNo});
+  AgreementResendOtpEvent({this.phNo});
 
   @override
   // TODO: implement props

@@ -6,10 +6,12 @@ import 'package:paisa_takatak_mobile/ui/poi_page.dart';
 import 'package:paisa_takatak_mobile/ui/signup_page.dart';
 import 'package:paisa_takatak_mobile/ui/splash_page.dart';
 import 'package:paisa_takatak_mobile/ui/verify_otp.dart';
+import 'data/sharedPref.dart';
 
 
-  main() {
-
+Future<void> main() async{
+    WidgetsFlutterBinding.ensureInitialized();
+    await SharedPrefs().init();
   runApp(MyApp());
 }
 
@@ -18,19 +20,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Paisa Takatak',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.indigo,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       routes: {
-        '/':(context) =>SplashPage(),
+        '/':(context) =>SplashPageProvider(),
         '/signUp':(context) => SignUpPageProvider(),
         '/verifyOtp':(context) => VerifyOtp(),
         '/poiPage':(context) =>POIPageProvider(),
-        '/loanForm':(context) =>LoanForm(),
-         '/loanAgreement':(context) =>LoanAgreementForm(),
+        '/loanForm':(context) =>LoanFormProvider(),
+         '/loanAgreement':(context) =>LoanAgreementFormProvider(),
         '/loanConfirmation':(context) =>LoanConfirmation(),
       },
 

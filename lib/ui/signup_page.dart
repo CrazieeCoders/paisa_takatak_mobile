@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:paisa_takatak_mobile/Exception/custom_exception.dart';
 import 'package:paisa_takatak_mobile/Themes/Style.dart';
 import 'package:paisa_takatak_mobile/Widgets/loading_Indicator.dart';
 import 'package:paisa_takatak_mobile/bloc/signUp_bloc/signUp_Bloc.dart';
@@ -137,46 +136,71 @@ class _SignUpPageState extends State<SignUpPage> {
                             height: 60.0,
                           ),
 
-                          Form(
-                            key: _formKey,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 32.0,right: 32.0),
-                              child: Card(
-                                elevation: 1.0,
-                                child: Container(
-                                  height: 56.5,
-                                  width: 236.0,
-                                  child: TextFormField(
-                                    controller: _phTextController,
-                                    focusNode: _phTextFocus,
-                                    keyboardType: TextInputType.phone,
-                                    style: Style.phoneTextStyle,
-                                    inputFormatters: [
-                                      new LengthLimitingTextInputFormatter(10),
-                                    ],
-                                    decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.all(5.0),
-                                        prefixText: "+91 |  ",
-                                        prefixStyle: Style.prefixTextStyle,
-                                        border: InputBorder.none
-                                    ),
-                                    onChanged: (value){
-                                      if(value.length == 10){
-                                        _phTextFocus.unfocus();
-                                      }
-                                    },
-                                    validator: (phNo){
+                          Stack(
 
-                                      if(phNo.length != 10){
-                                        return "Please enter valid Phone Number";
-                                      }
-                                      return null;
-                                    },
+                            children: <Widget>[
+
+                                     Padding(
+                                       padding: const EdgeInsets.only(left:50.0),
+                                       child: Card(
+                                        elevation: 1.0,
+                                        child: Container(
+                                          height: 56.5,
+                                          width: 70.0,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(12.0),
+                                            child: Text(
+                                              '+ 91 ',
+                                              style:  Style.prefixTextStyle,
+                                            ),
+                                          ),
+                                        ),
+                                    ),
+                                     ),
+
+
+                              Form(
+                                key: _formKey,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left:120.0),
+                                  child: Card(
+                                    elevation: 1.0,
+                                    child: Container(
+                                      height: 56.5,
+                                      width: 216.0,
+                                      child: TextFormField(
+                                        controller: _phTextController,
+                                        focusNode: _phTextFocus,
+                                        keyboardType: TextInputType.phone,
+                                        style: Style.phoneTextStyle,
+                                        inputFormatters: [
+                                          new LengthLimitingTextInputFormatter(10),
+                                        ],
+                                        decoration: InputDecoration(
+                                            contentPadding: EdgeInsets.only(left:20.0),
+
+                                            border: InputBorder.none
+                                        ),
+                                        onChanged: (value){
+                                          if(value.length == 10){
+                                            _phTextFocus.unfocus();
+                                          }
+                                        },
+                                        validator: (phNo){
+                                          if(phNo.length != 10){
+                                            return "Please enter valid Phone Number";
+                                          }
+                                          return null;
+                                        },
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
+                            ],
                           ),
+
+
                           SizedBox(
                             height: 75.5,
                           ),

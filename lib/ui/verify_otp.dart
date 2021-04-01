@@ -44,7 +44,8 @@ class _VerifyOtpState extends State<VerifyOtp> {
         body: BlocListener<SignUpBloc,OtpState>(
           listener: (context,state){
             if(state is OtpSuccessState){
-              Navigator.pushNamedAndRemoveUntil(context,'/poiPage', (route) => false);
+              Navigator.pushNamedAndRemoveUntil(context,'/poiPage', (route) => false,
+              );
             }else if(state is OtpFailureState){
               print("Came inside OTp Failure State");
               Fluttertoast.showToast(msg: "Invalid OTP !!",
@@ -325,7 +326,7 @@ class _OtpFormState extends State<OtpForm> with TickerProviderStateMixin{
 
                 String pin = verifyOtpMethod();
 
-                _signUpBloc.add(VerifyOtpEvent(pin: pin));
+                _signUpBloc.add(VerifyOtpEvent(pin: pin,phNo:widget.phNo));
 
 
               },

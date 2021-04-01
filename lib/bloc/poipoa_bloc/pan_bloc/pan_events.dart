@@ -14,4 +14,13 @@ class AddPanEvent extends PanEvent{
 }
 
 
+class CheckPanEvent extends PanEvent{
+
+  CheckPanEvent();
+  @override
+  // TODO: implement props
+  List<Object> get props =>[];
+}
+
+
 

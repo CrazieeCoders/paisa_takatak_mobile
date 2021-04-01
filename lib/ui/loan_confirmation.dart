@@ -109,13 +109,9 @@ class _LoanConfirmationState extends State<LoanConfirmation> {
                            ),
                          ),
                        ),
-
-
                      ],
                    ),
                  ),
-
-
                 ],
               ),
             ),

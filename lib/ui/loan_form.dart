@@ -1,7 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:paisa_takatak_mobile/Themes/Style.dart';
+import 'package:paisa_takatak_mobile/Widgets/loading_Indicator.dart';
+import 'package:paisa_takatak_mobile/bloc/loanAgreement_bloc/loanAgreement_bloc.dart';
+import 'package:paisa_takatak_mobile/bloc/loanAgreement_bloc/loanAgreement_event.dart';
+import 'package:paisa_takatak_mobile/bloc/loanform_bloc/loaform_event.dart';
+import 'package:paisa_takatak_mobile/bloc/loanform_bloc/loanform_bloc.dart';
+import 'package:paisa_takatak_mobile/bloc/loanform_bloc/loanform_state.dart';
+import 'package:paisa_takatak_mobile/data/sharedPref.dart';
+import 'package:paisa_takatak_mobile/model/registeration_model.dart';
+import 'package:paisa_takatak_mobile/services/api_services.dart';
+
+
+class LoanFormProvider extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+        providers: [
+         BlocProvider<LoanFormBloc>(
+            create: (context)=>LoanFormBloc(),),
+
+          BlocProvider<AgreementBloc>(
+            create: (context)=>AgreementBloc(),),
+        ],
+
+        child: LoanForm());
+  }
+}
+
 
 class LoanForm extends StatefulWidget {
   @override
@@ -9,63 +38,88 @@ class LoanForm extends StatefulWidget {
 }
 
 class _LoanFormState extends State<LoanForm> {
+
+  LoanFormBloc loanFormBloc;
+  AgreementBloc agreementBloc;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Loan Application Form', style: Style.appBarStyle),
-        backgroundColor: Style.paleYellow,
-        elevation: 0.0,
-        centerTitle: true,
-        leading: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Image.asset('cutouts/verify-otp/Icon-Arrow-Left@1.5x.png')),
-      ),
-      body: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Style.paleYellow,
-                  Style.palePurple,
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
-            child: Container(
+
+    loanFormBloc = BlocProvider.of<LoanFormBloc>(context);
+    agreementBloc = BlocProvider.of<AgreementBloc>(context);
+
+    return BlocListener<LoanFormBloc,LoanFormState>(
+      listener: (context,state){
+        if(state is LoanFormSuccessState){
+          LoadingDialog.hide(context);
+          Navigator.of(context).pushNamed('/loanAgreement');
+        }else if(state is LoanFormLoadingState){
+          LoadingDialog.show(context);
+        }else if(state is LoanFormFailureState){
+          LoadingDialog.hide(context);
+          Fluttertoast.showToast(msg: "Failed to Update !!",
+              toastLength: Toast.LENGTH_LONG
+          );
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Loan Application Form', style: Style.appBarStyle),
+          backgroundColor: Style.paleYellow,
+          elevation: 0.0,
+          centerTitle: true,
+          leading: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Image.asset('cutouts/verify-otp/Icon-Arrow-Left@1.5x.png')),
+        ),
+        body: Stack(
+          children: [
+            Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5.0),
-                color: Colors.white,
-              ),
-              child: ListView(
-                children: [
-                  Center(
-                      child: Padding(
-                    padding: const EdgeInsets.only(top: 20.0, bottom: 28.0),
-                    child: Text(
-                      'Complete the Loan Application',
-                      style: Style.subHeaderTextStyle,
-                    ),
-                  )),
-                  AppForm(context),
-                ],
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Style.paleYellow,
+                    Style.palePurple,
+                  ],
+                ),
               ),
             ),
-          )
-        ],
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5.0),
+                  color: Colors.white,
+                ),
+                child: ListView(
+                  children: [
+                    Center(
+                        child: Padding(
+                      padding: const EdgeInsets.only(top: 20.0, bottom: 28.0),
+                      child: Text(
+                        'Complete the Loan Application',
+                        style: Style.subHeaderTextStyle,
+                      ),
+                    )),
+                    AppForm(context,loanFormBloc,agreementBloc),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
 }
 
-Widget AppForm(BuildContext context) {
+Widget AppForm(BuildContext context,LoanFormBloc loanFormBloc,AgreementBloc agreementBloc) {
+
+
   TextEditingController loanAmountController = TextEditingController();
   TextEditingController loanTenureController = TextEditingController();
   TextEditingController nameTextController = TextEditingController();
@@ -80,6 +134,8 @@ Widget AppForm(BuildContext context) {
 
   var maskFormatter = new MaskTextInputFormatter(mask: '#### #### ####', filter: { "#": RegExp(r'[0-9]') });
   final _formKey = GlobalKey<FormState>();
+  SharedPrefs sharedPrefs =SharedPrefs();
+  APIService apiService = APIService();
 
 
   return Form(
@@ -221,6 +277,8 @@ Widget AppForm(BuildContext context) {
             height: 46.5,
             width: 360.0,
             child: TextFormField(
+              enabled: false,
+              readOnly: true,
               controller: phTextController,
               keyboardType: TextInputType.phone,
               style: Style.input2TextStyle,
@@ -230,13 +288,9 @@ Widget AppForm(BuildContext context) {
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.all(10.0),
                 border: InputBorder.none,
+                hintText: '${sharedPrefs.getPhone}',
+                hintStyle: Style.input2TextStyle
               ),
-              validator: (ph) {
-                if (ph.length != 10) {
-                  return "Invalid Number";
-                }
-                return null;
-              },
             ),
           ),
         ),
@@ -262,7 +316,8 @@ Widget AppForm(BuildContext context) {
               decoration: InputDecoration(
                   contentPadding: EdgeInsets.all(5.0),
                   border: InputBorder.none,
-                  suffixIcon: Image.asset('cutouts/POIPOA/help-icon@1x.png')),
+                //  suffixIcon: Image.asset('cutouts/POIPOA/help-icon@1x.png')
+              ),
               validator: (ph) {
                 if (ph.length != 10) {
                   return "Invalid Number";
@@ -388,7 +443,7 @@ Widget AppForm(BuildContext context) {
           children: [
             Center(
               child: Padding(
-                padding: const EdgeInsets.only(),
+                padding: const EdgeInsets.only(top:8.0),
                 child: Text(
                   'Area PIN:',
                   style: TextStyle(
@@ -483,7 +538,7 @@ Widget AppForm(BuildContext context) {
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.all(10.0),
                 border: InputBorder.none,
-                suffixIcon: Image.asset('cutouts/POIPOA/help-icon@1x.png'),
+               //r suffixIcon: Image.asset('cutouts/POIPOA/help-icon@1x.png'),
               ),
               validator: (value) {
                 if (value.length != 14) {
@@ -501,10 +556,26 @@ Widget AppForm(BuildContext context) {
               padding: const EdgeInsets.all(16.0),
               child: GestureDetector(
                 onTap: (){
-                  if(_formKey.currentState.validate()){
-                      Navigator.pushNamedAndRemoveUntil(context,'/poiPage', (route) => false);
+
+                  if(_formKey.currentState.validate()) {
+
+                    RegisterationInfo register =
+                    RegisterationInfo(
+                      alternatePhNum:ph2TextController.text,
+                      loanAmount: loanAmountController.text,
+                      loanTenure: loanTenureController.text,
+                      localAddress: addr2TextController.text,
+                      panNumber: panTextController.text,
+                      permanentAddr: addr1TextController.text,
+                      phNum: sharedPrefs.getPhone,
+                      pinCode: pin1TextController.text,
+                      uidNumber: uidTextController.text,
+                      userName: nameTextController.text,
+                    );
+
+                    agreementBloc.add(AgreementSendOtpEvent(phNo: sharedPrefs.getPhone));
+                    loanFormBloc.add(AddLoanFormEvent(registerationInfo:register));
                   }
-                 //   Navigator.pushNamedAndRemoveUntil(context,'/poiPage', (route) => false);
                 },
                 child: Container(
                   height: 50.0,

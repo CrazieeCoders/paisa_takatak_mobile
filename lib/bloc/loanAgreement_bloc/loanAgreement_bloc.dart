@@ -1,0 +1,64 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:paisa_takatak_mobile/services/api_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'loanAgreement_event.dart';
+import 'loanAgreement_state.dart';
+
+class AgreementBloc extends Bloc<AgreementOtpEvent,AgreementOtpState>{
+
+  APIService apiService = APIService();
+  static String verifyOtp= '';
+  bool isVerified=false;
+
+  AgreementBloc() : super(AgreementOtpInitialState());
+
+  @override
+  Stream<AgreementOtpState> mapEventToState(AgreementOtpEvent event) async*{
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    // TODO: implement mapEventToState
+    try {
+      if(event is AgreementSendOtpEvent){
+
+        yield AgreementOtpLoadingState();
+
+        verifyOtp = await apiService.loanAgreementOtp(event.phNo);
+        yield AgreementSendOtpState(sendOtp:event.phNo);
+
+      }else if(event is AgreementVerifyOtpEvent){
+
+        isVerified = checkOtp(verifyOtp:verifyOtp,otp:event.pin);
+
+        if(isVerified){
+          yield AgreementOtpSuccessState();
+          prefs.setInt("loanStatus",1);
+        }else{
+          yield AgreementOtpFailureState();
+        }
+
+      }else if(event is AgreementResendOtpEvent){
+
+        yield AgreementOtpLoadingState();
+        verifyOtp = await apiService.loanAgreementOtp(event.phNo);
+        yield AgreementResendOtpSuccessState();
+      }
+
+    }catch(e){
+      yield AgreementOtpErrorState(errMsg: e.toString());
+    }
+  }
+
+
+
+  bool checkOtp({@required String verifyOtp,@required String otp}){
+
+    if(verifyOtp == otp){
+      return true;
+    }else{
+      return false;
+    }
+
+  }
+}

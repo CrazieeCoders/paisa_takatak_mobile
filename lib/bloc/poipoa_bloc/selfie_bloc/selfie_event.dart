@@ -2,24 +2,25 @@ import 'package:equatable/equatable.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 
-abstract class AadhaarFrontEvent extends Equatable{}
+abstract class SelfieEvent extends Equatable{}
 
-class AddAadhaarFrontEvent extends AadhaarFrontEvent{
+class AddSelfieEvent extends SelfieEvent{
   File img;
 
-  AddAadhaarFrontEvent({@required this.img});
+  AddSelfieEvent({@required this.img});
   @override
   // TODO: implement props
   List<Object> get props =>[img];
 }
 
 
-class CheckAadhaarFrontEvent extends AadhaarFrontEvent{
+class CheckSelfieEvent extends SelfieEvent{
+  File img;
 
-
-  CheckAadhaarFrontEvent();
+  CheckSelfieEvent();
   @override
   // TODO: implement props
   List<Object> get props =>[];
 }
+
 
