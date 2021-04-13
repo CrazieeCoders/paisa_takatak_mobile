@@ -1,6 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'package:paisa_takatak_mobile/Exception/custom_exception.dart';
 import 'package:paisa_takatak_mobile/data/sharedPref.dart';
+import 'package:paisa_takatak_mobile/model/household_model.dart';
 import 'package:paisa_takatak_mobile/model/otp_model.dart';
 import 'package:paisa_takatak_mobile/model/registeration_model.dart';
 import 'package:paisa_takatak_mobile/model/uploadFiles_model.dart';
@@ -29,6 +30,15 @@ class APIService{
     _sharedPrefs.setAadharFrontStatus(otpModel.responseObject.documentStatus.aadharCard);
     _sharedPrefs.setAadharBackStatus(otpModel.responseObject.documentStatus.aadharCard);
     _sharedPrefs.setChequeStatus(otpModel.responseObject.documentStatus.cancelledCheque);
+    _sharedPrefs.setBankStatementStatus(otpModel.responseObject.documentStatus.bankStatement);
+    
+    _sharedPrefs.setLoanApplicationForm(otpModel.responseObject.documentStatus.loanApplicationForm);
+    _sharedPrefs.setLoanAgreementSigned(otpModel.responseObject.documentStatus.loanAgreementSigned);
+    _sharedPrefs.setHouseholdStatus(otpModel.responseObject.documentStatus.houseHoldStatus);
+    _sharedPrefs.setHouseholdFlag(otpModel.responseObject.documentStatus.houseHoldFlag);
+    _sharedPrefs.setLoanApplicationUnderProcess(otpModel.responseObject.documentStatus.loanApplicationUnderProcess);
+
+
     String otp = _returnResponse(otpModel);
 
     otp = utf8.decode(base64.decode(otpModel.responseObject.encyPass));
@@ -114,7 +124,32 @@ class APIService{
   }
 
 
+  householdForm(HouseHold houseHold) async{
 
+    authorizationToken = _sharedPrefs.getAuthorizationToken;
+    String phNo = _sharedPrefs.getPhone;
+
+    var res = await  http.post(Uri.encodeFull(baseUrl+'/household/saveInfo'),headers: {
+      'Authorization':authorizationToken,
+      "content-type": "application/json"
+    },
+      body:json.encode({
+        "firstEmiAmount": houseHold.firstStEmi,
+        "houseHoldExpenses": houseHold.householdExpense,
+        "monthlyIncome": houseHold.monthlyIncome,
+        "numOfDepend": houseHold.noOfDependents,
+        "phoneNumber": phNo,
+        "secondEmiAmount": houseHold.secondNdEmi,
+        "thirdEmiAmount": houseHold.thirdRdEmi
+      }),
+    );
+
+    print(' the response code is :${res.statusCode}');
+
+
+
+
+  }
 
 
 

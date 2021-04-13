@@ -9,14 +9,15 @@ class PermissionsService{
       Permission.camera,
       Permission.phone,
       Permission.sms,
+      Permission.storage,
     ].request();
 
     if(statuses[Permission.camera].isGranted){
       if(statuses[Permission.phone].isGranted){
         if(statuses[Permission.sms].isGranted){
-
-        return true;
-
+          if(statuses[Permission.storage].isGranted) {
+            return true;
+          }
         }
       }
 

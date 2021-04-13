@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:paisa_takatak_mobile/Themes/Style.dart';
+import 'package:paisa_takatak_mobile/Widgets/internet_connectivity.dart';
+import 'package:paisa_takatak_mobile/bloc/network_bloc/network_bloc.dart';
+import 'package:paisa_takatak_mobile/bloc/network_bloc/network_state.dart';
 import 'package:paisa_takatak_mobile/bloc/poipoa_bloc/aadhaar_back_bloc/aadhaar_back_bloc.dart';
 import 'package:paisa_takatak_mobile/bloc/poipoa_bloc/aadhaar_back_bloc/aadhaar_back_states.dart';
 import 'package:paisa_takatak_mobile/bloc/poipoa_bloc/aadhaar_back_bloc/aadhar_back_events.dart';
@@ -23,6 +26,7 @@ import 'package:paisa_takatak_mobile/data/sharedPref.dart';
 import 'package:paisa_takatak_mobile/model/arguments.dart';
 import 'dart:io';
 import 'package:progress_indicators/progress_indicators.dart';
+import 'package:paisa_takatak_mobile/Themes/size_config.dart';
 
 class POIPageProvider extends StatelessWidget {
   @override
@@ -65,6 +69,10 @@ class _POIPageState extends State<POIPage> {
   AadhaarBackBloc _aadhaarBackBloc;
   static File imageFile;
 
+  double h = SizeConfig.heightMultiplier;
+  double w = SizeConfig.widthMultiplier;
+  int flag =0;
+
   @override
   Widget build(BuildContext context) {
     _selfieBloc = BlocProvider.of<SelfieBloc>(context);
@@ -81,7 +89,7 @@ class _POIPageState extends State<POIPage> {
 
       return DropdownButton(
         icon: Icon(Icons.arrow_drop_down),
-        iconSize: 28.0,
+        iconSize: 3.41 * h,
         isExpanded: true,
         underline: SizedBox(),
         value: valueChoose,
@@ -90,7 +98,8 @@ class _POIPageState extends State<POIPage> {
           return DropdownMenuItem(
               value: valueItem,
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding:
+                    EdgeInsets.fromLTRB(1.94 * w, 0.97 * h, 1.94 * w, 0.97 * h),
                 child: Text(
                   valueItem,
                   style: Style.dropdownTextStyle,
@@ -108,73 +117,86 @@ class _POIPageState extends State<POIPage> {
           elevation: 0.0,
           centerTitle: true,
         ),
-        body: Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                Style.paleYellow,
-                Style.palePurple,
-              ])),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5.0),
-                color: Colors.white,
+        body: BlocListener<NetworkBloc, NetworkState>(
+          listener: (context, state) {
+            if (state is ConnectionFailure) {
+              flag = 1;
+              InternetConnectivity.show(context);
+            } else if (state is ConnectionSuccess) {
+              if (flag == 1) {
+                InternetConnectivity.hide(context);
+              }
+            }
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                  Style.paleYellow,
+                  Style.palePurple,
+                ])),
+            child: Padding(
+              padding:
+                  EdgeInsets.fromLTRB(3.89 * w, 1.46 * h, 3.89 * w, 1.46 * h),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5.0),
+                  color: Colors.white,
+                ),
+                child: ListView(children: [
+                  SizedBox(
+                    height: 2.43 * h,
+                  ),
+                  UpperHalf(),
+                  SizedBox(
+                    height: 1.46 * h,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 7.29 * w),
+                    child: Text('Choose POA Document',
+                        style: Style.desc2TextStyle),
+                  ),
+                  SizedBox(
+                    height: 1.21 * h,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 7.29 * w, right: 25.0),
+                    child: Container(
+                        height: 4.87 * h,
+                        width: 36.49 * w,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey,
+                              blurRadius: 2.0,
+                            ),
+                          ],
+                        ),
+                        child: Center(child: dropDownButton())),
+                  ),
+                  SizedBox(
+                    height: 0.97 * h,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 7.29 * w),
+                    child: Text(
+                        'Take front and back picture of your Aadhaar card / ',
+                        style: Style.desc2TextStyle),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 7.29 * w),
+                    child: Text('Upload from your mobile device ',
+                        style: Style.desc2TextStyle),
+                  ),
+                  SizedBox(
+                    height: 3.65 * h,
+                  ),
+                  LowerHalf(widget.args, widget.sharedPrefs),
+                ]),
               ),
-              child: ListView(children: [
-                SizedBox(
-                  height: 20.0,
-                ),
-                UpperHalf(),
-                SizedBox(
-                  height: 12.0,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 40.0),
-                  child:
-                      Text('Choose PDA Document', style: Style.desc2TextStyle),
-                ),
-                SizedBox(
-                  height: 10.0,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 40.0, right: 25.0),
-                  child: Container(
-                      height: 40,
-                      width: 150,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey,
-                            blurRadius: 2.0,
-                          ),
-                        ],
-                      ),
-                      child: Center(child: dropDownButton())),
-                ),
-                SizedBox(
-                  height: 8.0,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 40.0),
-                  child: Text(
-                      'Take front and back picture of your Aadhaar card / ',
-                      style: Style.desc2TextStyle),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 40.0),
-                  child: Text('Upload from your mobile device ',
-                      style: Style.desc2TextStyle),
-                ),
-                SizedBox(
-                  height: 30.0,
-                ),
-                LowerHalf(widget.args, widget.sharedPrefs),
-              ]),
             ),
           ),
         ));
@@ -190,16 +212,14 @@ class _POIPageState extends State<POIPage> {
           ),
         ),
         SizedBox(
-          height: 20.0,
+          height: 2.43 * h,
         ),
         Row(
           children: [
-            SizedBox(
-              width: 40.0,
-            ),
+            SizedBox(width: 7.29 * w),
             Text('Selfie/Photo', style: Style.normalTextStyle),
             SizedBox(
-              width: 110.0,
+              width: 26.76 * w,
             ),
             Text(
               'PAN Card',
@@ -208,12 +228,12 @@ class _POIPageState extends State<POIPage> {
           ],
         ),
         SizedBox(
-          height: 12.0,
+          height: 1.46 * h,
         ),
         Row(
           children: [
             SizedBox(
-              width: 40.0,
+              width: 7.29 * w,
             ),
             BlocListener<SelfieBloc, SelfieState>(
               listener: (context, state) {
@@ -225,8 +245,8 @@ class _POIPageState extends State<POIPage> {
                 builder: (context, state) {
                   if (state is SelfieLoadingState) {
                     return Container(
-                      height: 120,
-                      width: 140,
+                      height: 14.63 * h,
+                      width: 36.06 * w,
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: Style.placeHolderColor,
@@ -235,11 +255,11 @@ class _POIPageState extends State<POIPage> {
                       child: Column(
                         children: [
                           SizedBox(
-                            height: 37,
+                            height: 4.51 * h,
                           ),
                           Center(
                             child: JumpingDotsProgressIndicator(
-                              fontSize: 28.0,
+                              fontSize: 3.41 * h,
                             ),
                           )
                         ],
@@ -247,8 +267,8 @@ class _POIPageState extends State<POIPage> {
                     );
                   } else if (state is SelfieSuccessState) {
                     return Container(
-                      height: 120,
-                      width: 140,
+                      height: 14.63 * h,
+                      width: 36.06 * w,
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: Style.placeHolderColor,
@@ -257,11 +277,15 @@ class _POIPageState extends State<POIPage> {
                       child: Column(
                         children: [
                           SizedBox(
-                            height: 32,
+                            height: 3.90 * h,
                           ),
                           Center(
-                              child: Image.asset(
-                                  'cutouts/POIPOA/confirm-icon@1.5x.png'))
+                              child: Container(
+                            height: 6.09 * h,
+                            width: 12.16 * w,
+                            child: Image.asset(
+                                'cutouts/POIPOA/confirm-icon@2x.png'),
+                          ))
                         ],
                       ),
                     );
@@ -270,10 +294,11 @@ class _POIPageState extends State<POIPage> {
                       onTap: () async {
                         await _showChoiceDiaLog(context);
                         _selfieBloc.add(AddSelfieEvent(img: imageFile));
+                        imageFile = null;
                       },
                       child: Container(
-                        height: 120,
-                        width: 140,
+                        height: 14.63 * h,
+                        width: 36.06 * w,
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: Style.onclickBorderColor,
@@ -282,18 +307,28 @@ class _POIPageState extends State<POIPage> {
                         child: Column(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 110.0, right: 8.0, top: 8.0),
-                              child: Image.asset(
-                                'cutouts/POIPOA/help-icon-red@1x.png',
+                              padding: EdgeInsets.only(
+                                  left: 26.76 * w,
+                                  right: 1.94 * w,
+                                  top: 0.97 * h),
+                              child: Container(
+                                height: 3.04 * h,
+                                width: 7.29 * w,
+                                child: Image.asset(
+                                  'cutouts/POIPOA/help-icon-red@2x.png',
+                                ),
                               ),
                             ),
                             SizedBox(
-                              height: 12,
+                              height: 1.46 * h,
                             ),
                             Center(
-                                child: Image.asset(
-                              'cutouts/POIPOA/camera-icon@1x.png',
+                                child: Container(
+                              height: 4.87 * h,
+                              width: 7.29 * w,
+                              child: Image.asset(
+                                'cutouts/POIPOA/camera-icon@2x.png',
+                              ),
                             ))
                           ],
                         ),
@@ -304,10 +339,11 @@ class _POIPageState extends State<POIPage> {
                     onTap: () async {
                       await _showChoiceDiaLog(context);
                       _selfieBloc.add(AddSelfieEvent(img: imageFile));
+                      imageFile = null;
                     },
                     child: Container(
-                      height: 120,
-                      width: 140,
+                      height: 14.63 * h,
+                      width: 36.06 * w,
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: Style.placeHolderColor,
@@ -316,17 +352,26 @@ class _POIPageState extends State<POIPage> {
                       child: Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(
-                                left: 110.0, right: 8.0, top: 8.0),
-                            child:
-                                Image.asset('cutouts/POIPOA/help-icon@1x.png'),
+                            padding: EdgeInsets.only(
+                                left: 26.76 * w,
+                                right: 1.94 * w,
+                                top: 0.97 * h),
+                            child: Container(
+                                height: 3.04 * h,
+                                width: 7.29 * w,
+                                child: Image.asset(
+                                    'cutouts/POIPOA/help-icon@2x.png')),
                           ),
                           SizedBox(
-                            height: 12,
+                            height: 1.46 * h,
                           ),
                           Center(
-                              child: Image.asset(
-                                  'cutouts/POIPOA/camera-icon@1x.png'))
+                              child: Container(
+                            height: 4.87 * h,
+                            width: 7.29 * w,
+                            child: Image.asset(
+                                'cutouts/POIPOA/camera-icon@2x.png'),
+                          ))
                         ],
                       ),
                     ),
@@ -335,7 +380,7 @@ class _POIPageState extends State<POIPage> {
               ),
             ),
             SizedBox(
-              width: 40.0,
+              width: 9.73 * w,
             ),
             BlocListener<PanBloc, PanState>(
               listener: (context, state) {
@@ -347,8 +392,8 @@ class _POIPageState extends State<POIPage> {
                 builder: (context, state) {
                   if (state is PanLoadingState) {
                     return Container(
-                      height: 120,
-                      width: 140,
+                      height: 14.63 * h,
+                      width: 36.06 * w,
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: Style.placeHolderColor,
@@ -357,11 +402,11 @@ class _POIPageState extends State<POIPage> {
                       child: Column(
                         children: [
                           SizedBox(
-                            height: 37,
+                            height: 4.51 * h,
                           ),
                           Center(
                             child: JumpingDotsProgressIndicator(
-                              fontSize: 28.0,
+                              fontSize: 3.41 * h,
                             ),
                           )
                         ],
@@ -369,8 +414,8 @@ class _POIPageState extends State<POIPage> {
                     );
                   } else if (state is PanSuccessState) {
                     return Container(
-                      height: 120,
-                      width: 140,
+                      height: 14.63 * h,
+                      width: 36.06 * w,
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: Style.placeHolderColor,
@@ -379,11 +424,15 @@ class _POIPageState extends State<POIPage> {
                       child: Column(
                         children: [
                           SizedBox(
-                            height: 32,
+                            height: 3.90 * h,
                           ),
                           Center(
-                              child: Image.asset(
-                                  'cutouts/POIPOA/confirm-icon@1.5x.png'))
+                              child: Container(
+                            height: 6.09 * h,
+                            width: 12.16 * w,
+                            child: Image.asset(
+                                'cutouts/POIPOA/confirm-icon@2x.png'),
+                          ))
                         ],
                       ),
                     );
@@ -393,14 +442,15 @@ class _POIPageState extends State<POIPage> {
                         try {
                           await _showChoiceDiaLog(context);
                           _panBloc.add(AddPanEvent(img: imageFile));
+                          imageFile = null;
                         } catch (e) {
                           Fluttertoast.showToast(
                               msg: "Please select a document");
                         }
                       },
                       child: Container(
-                        height: 120,
-                        width: 140,
+                        height: 14.63 * h,
+                        width: 36.06 * w,
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: Style.onclickBorderColor,
@@ -409,18 +459,28 @@ class _POIPageState extends State<POIPage> {
                         child: Column(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 110.0, right: 8.0, top: 8.0),
-                              child: Image.asset(
-                                'cutouts/POIPOA/help-icon-red@1x.png',
+                              padding: EdgeInsets.only(
+                                  left: 26.76 * w,
+                                  right: 1.94 * w,
+                                  top: 0.97 * h),
+                              child: Container(
+                                height: 3.04 * h,
+                                width: 7.29 * w,
+                                child: Image.asset(
+                                  'cutouts/POIPOA/help-icon-red@2x.png',
+                                ),
                               ),
                             ),
                             SizedBox(
-                              height: 12,
+                              height: 1.46 * h,
                             ),
                             Center(
-                                child: Image.asset(
-                              'cutouts/POIPOA/camera-icon@1x.png',
+                                child: Container(
+                              height: 4.87 * h,
+                              width: 7.29 * w,
+                              child: Image.asset(
+                                'cutouts/POIPOA/camera-icon@2x.png',
+                              ),
                             ))
                           ],
                         ),
@@ -432,10 +492,11 @@ class _POIPageState extends State<POIPage> {
                     onTap: () async {
                       await _showChoiceDiaLog(context);
                       _panBloc.add(AddPanEvent(img: imageFile));
+                      imageFile = null;
                     },
                     child: Container(
-                      height: 120,
-                      width: 140,
+                      height: 14.63 * h,
+                      width: 36.06 * w,
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: Style.placeHolderColor,
@@ -444,17 +505,26 @@ class _POIPageState extends State<POIPage> {
                       child: Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(
-                                left: 110.0, right: 8.0, top: 8.0),
-                            child:
-                                Image.asset('cutouts/POIPOA/help-icon@1x.png'),
+                            padding: EdgeInsets.only(
+                                left: 26.76 * w,
+                                right: 1.94 * w,
+                                top: 0.97 * h),
+                            child: Container(
+                                height: 3.04 * h,
+                                width: 7.29 * w,
+                                child: Image.asset(
+                                    'cutouts/POIPOA/help-icon@2x.png')),
                           ),
                           SizedBox(
-                            height: 12,
+                            height: 1.46 * h,
                           ),
                           Center(
-                              child: Image.asset(
-                                  'cutouts/POIPOA/camera-icon@1x.png'))
+                              child: Container(
+                            height: 4.87 * h,
+                            width: 7.29 * w,
+                            child: Image.asset(
+                                'cutouts/POIPOA/camera-icon@2x.png'),
+                          ))
                         ],
                       ),
                     ),
@@ -465,7 +535,7 @@ class _POIPageState extends State<POIPage> {
           ],
         ),
         SizedBox(
-          height: 12.0,
+          height: 1.46 * h,
         ),
       ],
     );
@@ -479,7 +549,7 @@ class _POIPageState extends State<POIPage> {
         Row(
           children: [
             SizedBox(
-              width: 40.0,
+              width: 7.29 * w,
             ),
             BlocListener<AadhaarFrontBloc, AadhaarFrontState>(
               listener: (context, state) {
@@ -491,8 +561,8 @@ class _POIPageState extends State<POIPage> {
                 builder: (context, state) {
                   if (state is AadhaarFrontLoadingState) {
                     return Container(
-                      height: 120,
-                      width: 140,
+                      height: 14.63 * h,
+                      width: 36.06 * w,
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: Style.placeHolderColor,
@@ -501,11 +571,11 @@ class _POIPageState extends State<POIPage> {
                       child: Column(
                         children: [
                           SizedBox(
-                            height: 37,
+                            height: 4.51 * h,
                           ),
                           Center(
                             child: JumpingDotsProgressIndicator(
-                              fontSize: 28.0,
+                              fontSize: 3.41 * h,
                             ),
                           )
                         ],
@@ -513,8 +583,8 @@ class _POIPageState extends State<POIPage> {
                     );
                   } else if (state is AadhaarFrontSuccessState) {
                     return Container(
-                      height: 120,
-                      width: 140,
+                      height: 14.63 * h,
+                      width: 36.06 * w,
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: Style.placeHolderColor,
@@ -523,11 +593,15 @@ class _POIPageState extends State<POIPage> {
                       child: Column(
                         children: [
                           SizedBox(
-                            height: 32,
+                            height: 3.90 * h,
                           ),
                           Center(
-                              child: Image.asset(
-                                  'cutouts/POIPOA/confirm-icon@1.5x.png'))
+                              child: Container(
+                            height: 6.09 * h,
+                            width: 12.16 * w,
+                            child: Image.asset(
+                                'cutouts/POIPOA/confirm-icon@2x.png'),
+                          ))
                         ],
                       ),
                     );
@@ -537,10 +611,11 @@ class _POIPageState extends State<POIPage> {
                         await _showChoiceDiaLog(context);
                         _aadhaarFrontBloc
                             .add(AddAadhaarFrontEvent(img: imageFile));
+                        imageFile = null;
                       },
                       child: Container(
-                        height: 120,
-                        width: 140,
+                        height: 14.63 * h,
+                        width: 36.06 * w,
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: Style.onclickBorderColor,
@@ -549,18 +624,28 @@ class _POIPageState extends State<POIPage> {
                         child: Column(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 110.0, right: 8.0, top: 8.0),
-                              child: Image.asset(
-                                'cutouts/POIPOA/help-icon-red@1x.png',
+                              padding: EdgeInsets.only(
+                                  left: 26.76 * w,
+                                  right: 1.94 * w,
+                                  top: 0.97 * h),
+                              child: Container(
+                                height: 3.04 * h,
+                                width: 7.29 * w,
+                                child: Image.asset(
+                                  'cutouts/POIPOA/help-icon-red@2x.png',
+                                ),
                               ),
                             ),
                             SizedBox(
-                              height: 12,
+                              height: 1.46 * h,
                             ),
                             Center(
-                                child: Image.asset(
-                              'cutouts/POIPOA/camera-icon@1x.png',
+                                child: Container(
+                              height: 4.87 * h,
+                              width: 7.29 * w,
+                              child: Image.asset(
+                                'cutouts/POIPOA/camera-icon@2x.png',
+                              ),
                             ))
                           ],
                         ),
@@ -572,10 +657,11 @@ class _POIPageState extends State<POIPage> {
                       await _showChoiceDiaLog(context);
                       _aadhaarFrontBloc
                           .add(AddAadhaarFrontEvent(img: imageFile));
+                      imageFile = null;
                     },
                     child: Container(
-                      height: 120,
-                      width: 140,
+                      height: 14.63 * h,
+                      width: 36.06 * w,
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: Style.placeHolderColor,
@@ -584,18 +670,27 @@ class _POIPageState extends State<POIPage> {
                       child: Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(
-                                left: 110.0, right: 8.0, top: 8.0),
-                            child:
-                                Image.asset('cutouts/POIPOA/help-icon@1x.png'),
+                            padding: EdgeInsets.only(
+                                left: 26.76 * w,
+                                right: 1.94 * w,
+                                top: 0.97 * h),
+                            child: Container(
+                                height: 3.04 * h,
+                                width: 7.29 * w,
+                                child: Image.asset(
+                                    'cutouts/POIPOA/help-icon@2x.png')),
                           ),
                           SizedBox(
-                            height: 12,
+                            height: 1.46 * h,
                           ),
                           Center(
                               child: Column(
                             children: [
-                              Image.asset('cutouts/POIPOA/camera-icon@1x.png'),
+                              Container(
+                                  height: 4.87 * h,
+                                  width: 7.29 * w,
+                                  child: Image.asset(
+                                      'cutouts/POIPOA/camera-icon@2x.png')),
                               Text(
                                 'Front',
                                 style: Style.desc2TextStyle,
@@ -610,7 +705,7 @@ class _POIPageState extends State<POIPage> {
               ),
             ),
             SizedBox(
-              width: 40.0,
+              width: 9.73 * w,
             ),
             BlocListener<AadhaarBackBloc, AadhaarBackState>(
               listener: (context, state) {
@@ -622,8 +717,8 @@ class _POIPageState extends State<POIPage> {
                   builder: (context, state) {
                 if (state is AadhaarBackLoadingState) {
                   return Container(
-                    height: 120,
-                    width: 140,
+                    height: 14.63 * h,
+                    width: 36.06 * w,
                     decoration: BoxDecoration(
                       border: Border.all(
                         color: Style.placeHolderColor,
@@ -632,11 +727,11 @@ class _POIPageState extends State<POIPage> {
                     child: Column(
                       children: [
                         SizedBox(
-                          height: 37,
+                          height: 4.51 * h,
                         ),
                         Center(
                           child: JumpingDotsProgressIndicator(
-                            fontSize: 28.0,
+                            fontSize: 3.41 * h,
                           ),
                         )
                       ],
@@ -644,8 +739,8 @@ class _POIPageState extends State<POIPage> {
                   );
                 } else if (state is AadhaarBackSuccessState) {
                   return Container(
-                    height: 120,
-                    width: 140,
+                    height: 14.63 * h,
+                    width: 36.06 * w,
                     decoration: BoxDecoration(
                       border: Border.all(
                         color: Style.placeHolderColor,
@@ -654,11 +749,15 @@ class _POIPageState extends State<POIPage> {
                     child: Column(
                       children: [
                         SizedBox(
-                          height: 32,
+                          height: 3.90 * h,
                         ),
                         Center(
-                            child: Image.asset(
-                                'cutouts/POIPOA/confirm-icon@1.5x.png'))
+                            child: Container(
+                          height: 6.09 * h,
+                          width: 12.16 * w,
+                          child: Image.asset(
+                              'cutouts/POIPOA/confirm-icon@1.5x.png'),
+                        ))
                       ],
                     ),
                   );
@@ -667,10 +766,11 @@ class _POIPageState extends State<POIPage> {
                     onTap: () async {
                       await _showChoiceDiaLog(context);
                       _aadhaarBackBloc.add(AddAadhaarBackEvent(img: imageFile));
+                      imageFile = null;
                     },
                     child: Container(
-                      height: 120,
-                      width: 140,
+                      height: 14.63 * h,
+                      width: 36.06 * w,
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: Style.onclickBorderColor,
@@ -679,18 +779,28 @@ class _POIPageState extends State<POIPage> {
                       child: Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(
-                                left: 110.0, right: 8.0, top: 8.0),
-                            child: Image.asset(
-                              'cutouts/POIPOA/help-icon-red@1x.png',
+                            padding: EdgeInsets.only(
+                                left: 26.76 * w,
+                                right: 1.94 * w,
+                                top: 0.97 * h),
+                            child: Container(
+                              height: 3.04 * h,
+                              width: 7.29 * w,
+                              child: Image.asset(
+                                'cutouts/POIPOA/help-icon-red@2x.png',
+                              ),
                             ),
                           ),
                           SizedBox(
-                            height: 12,
+                            height: 1.46 * h,
                           ),
                           Center(
-                              child: Image.asset(
-                            'cutouts/POIPOA/camera-icon@1x.png',
+                              child: Container(
+                            height: 4.87 * h,
+                            width: 7.29 * w,
+                            child: Image.asset(
+                              'cutouts/POIPOA/camera-icon@2x.png',
+                            ),
                           ))
                         ],
                       ),
@@ -701,10 +811,11 @@ class _POIPageState extends State<POIPage> {
                   onTap: () async {
                     await _showChoiceDiaLog(context);
                     _aadhaarBackBloc.add(AddAadhaarBackEvent(img: imageFile));
+                    imageFile = null;
                   },
                   child: Container(
-                    height: 120,
-                    width: 140,
+                    height: 14.63 * h,
+                    width: 36.06 * w,
                     decoration: BoxDecoration(
                       border: Border.all(
                         color: Style.placeHolderColor,
@@ -713,17 +824,25 @@ class _POIPageState extends State<POIPage> {
                     child: Column(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(
-                              left: 110.0, right: 8.0, top: 8.0),
-                          child: Image.asset('cutouts/POIPOA/help-icon@1x.png'),
+                          padding: EdgeInsets.only(
+                              left: 26.76 * w, right: 1.94 * w, top: 0.97 * h),
+                          child: Container(
+                              height: 3.04 * h,
+                              width: 7.29 * w,
+                              child: Image.asset(
+                                  'cutouts/POIPOA/help-icon@2x.png')),
                         ),
                         SizedBox(
-                          height: 12,
+                          height: 1.46 * h,
                         ),
                         Center(
                             child: Column(
                           children: [
-                            Image.asset('cutouts/POIPOA/camera-icon@1x.png'),
+                            Container(
+                                height: 4.87 * h,
+                                width: 7.29 * w,
+                                child: Image.asset(
+                                    'cutouts/POIPOA/camera-icon@2x.png')),
                             Text(
                               'Back',
                               style: Style.desc2TextStyle,
@@ -739,10 +858,10 @@ class _POIPageState extends State<POIPage> {
           ],
         ),
         SizedBox(
-          height: 20.0,
+          height: 2.43 * w,
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 40.0, bottom: 18.0),
+          padding: EdgeInsets.only(left: 7.29 * w, bottom: 18.0),
           child: Text('Cancelled Cheque', style: Style.normalTextStyle),
         ),
         BlocListener<ChequeBloc, ChequeState>(
@@ -755,10 +874,10 @@ class _POIPageState extends State<POIPage> {
             builder: (context, state) {
               if (state is ChequeLoadingState) {
                 return Padding(
-                  padding: const EdgeInsets.only(left: 40.0),
+                  padding: EdgeInsets.only(left: 7.29 * w),
                   child: Container(
-                    height: 100,
-                    width: 320,
+                    height: 12.19 * h,
+                    width: 77.85 * w,
                     decoration: BoxDecoration(
                       border: Border.all(
                         color: Style.placeHolderColor,
@@ -767,11 +886,11 @@ class _POIPageState extends State<POIPage> {
                     child: Column(
                       children: [
                         SizedBox(
-                          height: 20.0,
+                          height: 2.43 * h,
                         ),
                         Center(
                           child: JumpingDotsProgressIndicator(
-                            fontSize: 28.0,
+                            fontSize: 3.41 * h,
                           ),
                         )
                       ],
@@ -780,7 +899,7 @@ class _POIPageState extends State<POIPage> {
                 );
               } else if (state is ChequeFailureState) {
                 return Padding(
-                  padding: const EdgeInsets.only(left: 40.0),
+                  padding: EdgeInsets.only(left: 7.29 * w),
                   child: GestureDetector(
                     onTap: () async {
                       try {
@@ -790,11 +909,12 @@ class _POIPageState extends State<POIPage> {
                         Fluttertoast.showToast(
                             msg: "No documents selected",
                             toastLength: Toast.LENGTH_SHORT);
+                        imageFile = null;
                       }
                     },
                     child: Container(
-                      height: 100,
-                      width: 320,
+                      height: 12.19 * h,
+                      width: 77.85 * w,
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: Style.onclickBorderColor,
@@ -803,14 +923,23 @@ class _POIPageState extends State<POIPage> {
                       child: Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(
-                                left: 260.0, right: 8.0, top: 8.0),
-                            child: Image.asset(
-                                'cutouts/POIPOA/help-icon-red@1x.png'),
+                            padding: EdgeInsets.only(
+                                left: 63.26 * w,
+                                right: 1.94 * w,
+                                top: 0.97 * h),
+                            child: Container(
+                              height: 3.04 * h,
+                              width: 7.29 * w,
+                              child: Image.asset(
+                                  'cutouts/POIPOA/help-icon-red@3x.png'),
+                            ),
                           ),
                           Center(
-                              child: Image.asset(
-                                  'cutouts/POIPOA/camera-icon@1x.png')),
+                              child: Container(
+                                  height: 4.87 * h,
+                                  width: 12.16 * w,
+                                  child: Image.asset(
+                                      'cutouts/POIPOA/camera-icon@2x.png'))),
                         ],
                       ),
                     ),
@@ -818,10 +947,10 @@ class _POIPageState extends State<POIPage> {
                 );
               } else if (state is ChequeSuccessState) {
                 return Padding(
-                  padding: const EdgeInsets.only(left: 40.0),
+                  padding: EdgeInsets.only(left: 7.29 * w),
                   child: Container(
-                    height: 100,
-                    width: 320,
+                    height: 12.19 * h,
+                    width: 77.85 * w,
                     decoration: BoxDecoration(
                       border: Border.all(
                         color: Style.placeHolderColor,
@@ -830,11 +959,15 @@ class _POIPageState extends State<POIPage> {
                     child: Column(
                       children: [
                         SizedBox(
-                          height: 22,
+                          height: 2.68 * h,
                         ),
                         Center(
-                            child: Image.asset(
-                                'cutouts/POIPOA/confirm-icon@1.5x.png'))
+                            child: Container(
+                          height: 6.09 * h,
+                          width: 19.46 * w,
+                          child:
+                              Image.asset('cutouts/POIPOA/confirm-icon@2x.png'),
+                        ))
                       ],
                     ),
                   ),
@@ -842,15 +975,16 @@ class _POIPageState extends State<POIPage> {
               }
 
               return Padding(
-                padding: const EdgeInsets.only(left: 40.0),
+                padding: EdgeInsets.only(left: 7.29 * w),
                 child: GestureDetector(
                   onTap: () async {
                     await _showChoiceDiaLog(context);
                     _chequeBloc.add(AddChequeEvent(img: imageFile));
+                    imageFile = null;
                   },
                   child: Container(
-                    height: 100,
-                    width: 320,
+                    height: 12.19 * h,
+                    width: 77.85 * w,
                     decoration: BoxDecoration(
                       border: Border.all(
                         color: Style.placeHolderColor,
@@ -859,13 +993,20 @@ class _POIPageState extends State<POIPage> {
                     child: Column(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(
-                              left: 260.0, right: 8.0, top: 8.0),
-                          child: Image.asset('cutouts/POIPOA/help-icon@1x.png'),
+                          padding: EdgeInsets.only(
+                              left: 63.26 * w, right: 1.94 * w, top: 0.97 * h),
+                          child: Container(
+                              height: 3.04 * h,
+                              width: 7.29 * w,
+                              child: Image.asset(
+                                  'cutouts/POIPOA/help-icon@2x.png')),
                         ),
                         Center(
-                            child:
-                                Image.asset('cutouts/POIPOA/camera-icon@1x.png')),
+                            child: Container(
+                                height: 4.87 * h,
+                                width: 12.16 * w,
+                                child: Image.asset(
+                                    'cutouts/POIPOA/camera-icon@2x.png'))),
                       ],
                     ),
                   ),
@@ -875,8 +1016,11 @@ class _POIPageState extends State<POIPage> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(
-              left: 66.0, top: 20.0, right: 46.0, bottom: 10.0),
+          padding: EdgeInsets.only(
+              left: 16.05 * w,
+              top: 2.43 * h,
+              right: 11.19 * w,
+              bottom: 1.21 * h),
           child: GestureDetector(
             onTap: () {
               int selfieStatus = sharedPrefs.getSelfieStatus;
@@ -893,9 +1037,10 @@ class _POIPageState extends State<POIPage> {
                   adhaarFrontStatus == 1 &&
                   adhaarBackStatus == 1 &&
                   chequeStatus == 1) {
-                Navigator.pushNamed(
+                Navigator.pushNamedAndRemoveUntil(
                   context,
                   '/loanForm',
+                  (route) => false,
                 );
               } else {
                 Fluttertoast.showToast(
@@ -906,8 +1051,8 @@ class _POIPageState extends State<POIPage> {
             },
             child: Center(
               child: Container(
-                height: 50.0,
-                width: 296.0,
+                height: 6.09 * h,
+                width: 72.01 * w,
                 decoration: BoxDecoration(
                     color: Style.inkBlueColor,
                     borderRadius: BorderRadius.circular(5.0)),
@@ -947,7 +1092,7 @@ class _POIPageState extends State<POIPage> {
                     ),
                   ),
                   SizedBox(
-                    height: 15.0,
+                    height: 1.82 * h,
                   ),
                   GestureDetector(
                     onTap: () {

@@ -69,6 +69,9 @@ class DocumentStatus {
     this.loanApplicationUnderProcess,
     this.createdDate,
     this.updateDate,
+    this.houseHoldStatus,
+    this.bankStatement,
+    this.houseHoldFlag
   });
 
   int id;
@@ -80,6 +83,9 @@ class DocumentStatus {
   int loanApplicationForm;
   int loanAgreementSigned;
   int loanApplicationUnderProcess;
+  int houseHoldStatus;
+  int bankStatement;
+  int houseHoldFlag;
   dynamic createdDate;
   dynamic updateDate;
 
@@ -95,6 +101,9 @@ class DocumentStatus {
     loanApplicationUnderProcess: json["loanApplicationUnderProcess"],
     createdDate: json["createdDate"],
     updateDate: json["updateDate"],
+      houseHoldStatus: json["houseHoldStatus"],
+    bankStatement: json["bankStatement"],
+    houseHoldFlag: json["houseHoldFlag"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -109,5 +118,8 @@ class DocumentStatus {
     "loanApplicationUnderProcess": loanApplicationUnderProcess,
     "createdDate": createdDate,
     "updateDate": updateDate,
+    "houseHoldStatus":houseHoldStatus,
+    "bankStatement":bankStatement,
+    "houseHoldFlag":houseHoldFlag,
   };
 }

@@ -63,4 +63,75 @@ class ResendOtpSuccessState extends OtpState{
 
 }
 
+class LoanAgreementPageOtpState extends OtpState{
+  @override
+  // TODO: implement props
+  List<Object> get props =>[];
+
+}
+
+
+
+class HouseHoldPageState extends OtpState{
+  @override
+  // TODO: implement props
+  List<Object> get props =>[];
+
+}
+
+
+
+class LoanConfirmationPageOtpState extends OtpState{
+  @override
+  // TODO: implement props
+  List<Object> get props =>[];
+
+}
+
+class PoiPoaPageOtpState extends OtpState{
+  @override
+  // TODO: implement props
+  List<Object> get props =>[];
+
+}
+
+class LoanFormPageOtpState extends OtpState{
+  @override
+  // TODO: implement props
+  List<Object> get props =>[];
+
+}
+
+class HouseholdPageOtpState extends OtpState{
+  @override
+  // TODO: implement props
+  List<Object> get props =>[];
+
+}
+
+class PaymentPageOtpState extends OtpState{
+  @override
+  // TODO: implement props
+  List<Object> get props =>[];
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+class LoanApplicationSuccessState extends OtpState{
+  @override
+  // TODO: implement props
+  List<Object> get props =>[];
+
+}
+
 

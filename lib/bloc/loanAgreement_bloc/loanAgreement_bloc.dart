@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:paisa_takatak_mobile/data/sharedPref.dart';
 import 'package:paisa_takatak_mobile/services/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,6 +12,7 @@ class AgreementBloc extends Bloc<AgreementOtpEvent,AgreementOtpState>{
   APIService apiService = APIService();
   static String verifyOtp= '';
   bool isVerified=false;
+  SharedPrefs sharedPrefs = SharedPrefs();
 
   AgreementBloc() : super(AgreementOtpInitialState());
 
@@ -25,15 +27,19 @@ class AgreementBloc extends Bloc<AgreementOtpEvent,AgreementOtpState>{
         yield AgreementOtpLoadingState();
 
         verifyOtp = await apiService.loanAgreementOtp(event.phNo);
+        print("${verifyOtp}");
         yield AgreementSendOtpState(sendOtp:event.phNo);
 
       }else if(event is AgreementVerifyOtpEvent){
 
+        print("${verifyOtp}");
+        print("${event.pin}");
+
         isVerified = checkOtp(verifyOtp:verifyOtp,otp:event.pin);
 
         if(isVerified){
+          sharedPrefs.setLoanAgreementSigned(1);
           yield AgreementOtpSuccessState();
-          prefs.setInt("loanStatus",1);
         }else{
           yield AgreementOtpFailureState();
         }
@@ -46,6 +52,7 @@ class AgreementBloc extends Bloc<AgreementOtpEvent,AgreementOtpState>{
       }
 
     }catch(e){
+      print('${e.toString()}');
       yield AgreementOtpErrorState(errMsg: e.toString());
     }
   }

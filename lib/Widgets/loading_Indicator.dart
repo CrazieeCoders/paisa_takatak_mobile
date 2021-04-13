@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:paisa_takatak_mobile/Themes/Style.dart';
+import 'package:paisa_takatak_mobile/Themes/size_config.dart';
 
 
 class LoadingDialog extends StatelessWidget {
@@ -15,6 +16,9 @@ class LoadingDialog extends StatelessWidget {
 
   static void hide(BuildContext context) =>Navigator.pop(context);
 
+  double h = SizeConfig.heightMultiplier;
+  double w = SizeConfig.widthMultiplier;
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -22,9 +26,9 @@ class LoadingDialog extends StatelessWidget {
       child: Center(
         child: Card(
           child: Container(
-            height: 80.0,
-            width: 80.0,
-            padding: EdgeInsets.all(12.0),
+            height: 9.75*h,
+            width: 19.46*w,
+            padding: EdgeInsets.fromLTRB(1.46*h,2.91*w,1.46*h,2.91*w),
             child: CircularProgressIndicator(
               backgroundColor: Style.palePurple,
             ),

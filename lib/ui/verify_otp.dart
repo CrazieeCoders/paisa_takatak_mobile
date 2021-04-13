@@ -5,11 +5,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:paisa_takatak_mobile/Themes/Style.dart';
 import 'package:paisa_takatak_mobile/Widgets/countDown_Timer.dart';
+import 'package:paisa_takatak_mobile/Widgets/internet_connectivity.dart';
 import 'package:paisa_takatak_mobile/Widgets/loading_Indicator.dart';
+import 'package:paisa_takatak_mobile/bloc/network_bloc/network_bloc.dart';
+import 'package:paisa_takatak_mobile/bloc/network_bloc/network_state.dart';
 import 'package:paisa_takatak_mobile/bloc/signUp_bloc/signUp_Bloc.dart';
 import 'package:paisa_takatak_mobile/bloc/signUp_bloc/signUp_events.dart';
 import 'package:paisa_takatak_mobile/bloc/signUp_bloc/signUp_states.dart';
 import 'package:paisa_takatak_mobile/model/arguments.dart';
+import 'package:paisa_takatak_mobile/Themes/size_config.dart';
 
 
 
@@ -24,6 +28,9 @@ class _VerifyOtpState extends State<VerifyOtp> {
   Widget build(BuildContext context) {
 
     final Arguments args = ModalRoute.of(context).settings.arguments;
+    double h = SizeConfig.heightMultiplier;
+    double w = SizeConfig.widthMultiplier;
+    int flag =0;
 
     return BlocProvider<SignUpBloc>(
       create: (context)=>SignUpBloc(),
@@ -39,15 +46,57 @@ class _VerifyOtpState extends State<VerifyOtp> {
                 onTap: (){
                   Navigator.pop(context);
                 },
-                child: Image.asset('cutouts/verify-otp/Icon-Arrow-Left@1.5x.png')),
+                child: Container(
+                    height: 7.31*h,
+                   width: 17.03*w,
+                    child: Image.asset('cutouts/verify-otp/Icon-Arrow-Left@3x.png')
+                )),
         ),
-        body: BlocListener<SignUpBloc,OtpState>(
+        body: MultiBlocListener(
+          listeners: [
+
+            BlocListener<NetworkBloc,NetworkState>(
+              listener: (context,state){
+
+                if(state is ConnectionFailure){
+                  flag = 1;
+                  InternetConnectivity.show(context);
+                }else if(state is ConnectionSuccess){
+                  if(flag ==1) {
+                    InternetConnectivity.hide(context);
+                  }
+
+                }
+              },
+
+            ),
+
+
+
+        BlocListener<SignUpBloc,OtpState>(
           listener: (context,state){
-            if(state is OtpSuccessState){
+            if(state is PoiPoaPageOtpState){
+              LoadingDialog.hide(context);
               Navigator.pushNamedAndRemoveUntil(context,'/poiPage', (route) => false,
               );
+            }else if(state is LoanConfirmationPageOtpState){
+              LoadingDialog.hide(context);
+              Navigator.pushNamedAndRemoveUntil(context,'/paymentPage', (route) => false,
+              );
+            }else if(state is LoanConfirmationPageOtpState){
+              LoadingDialog.hide(context);
+              Navigator.pushNamedAndRemoveUntil(context,'/loanConfirmation', (route) => false,
+              );
+            }else if(state is HouseholdPageOtpState){
+              LoadingDialog.hide(context);
+              Navigator.pushNamedAndRemoveUntil(context,'/loanDetailForm', (route) => false,
+              );
+            }else if(state is LoanFormPageOtpState){
+              LoadingDialog.hide(context);
+              Navigator.pushNamedAndRemoveUntil(context,'/loanForm', (route) => false,
+              );
             }else if(state is OtpFailureState){
-              print("Came inside OTp Failure State");
+              LoadingDialog.hide(context);
               Fluttertoast.showToast(msg: "Invalid OTP !!",
                   toastLength: Toast.LENGTH_LONG
               );
@@ -64,69 +113,77 @@ class _VerifyOtpState extends State<VerifyOtp> {
               print("came inside else method");
               LoadingDialog.hide(context);
             }
-          },
-          child: Stack(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Style.paleYellow,
-                      Style.palePurple,
-                    ],
-                  ),
-                ),),
-                 Padding(
-                  padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 24.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5.0),
-                      color: Colors.white,
+          },),
+
+],
+
+
+            child: Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Style.paleYellow,
+                        Style.palePurple,
+                      ],
                     ),
-                    child:ListView(
-                        children: [
-                          SizedBox(
-                            height: 60.0,
-                          ),
-                          Center(child: Image.asset('cutouts/verify-otp/Banner@1x.png')),
-                          Center(
-                            child: Text('Verify OTP',
-                            style: Style.headerTextStyle,
-                            ),
-                          ),
-                          SizedBox(height: 16.0,),
-                          Center(
-                            child: Text('Please enter the 4-digit OTP number received on',
-                            style: Style.descTextStyle,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 16.0,
-                          ),
-                          Center(
-                            child: Text('+91 ${args.phoneNo}',
-                            style: Style.desc1TextStyle,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20.0,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left:38.0,right: 28.0),
-                            child: OtpForm(phNo: args.phoneNo,),
-                          ),
-
-
-                        ],
+                  ),),
+                   Padding(
+                    padding: EdgeInsets.fromLTRB(3.89*w, 1.46*h, 3.89*w,2.92*h),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5.0),
+                        color: Colors.white,
                       ),
+                      child:ListView(
+                          children: [
+                            SizedBox(
+                              height: 7.31*h,
+                            ),
+                            Container(
+                                height: 32.92*h,
+                                width: 48.66*w,
+                                child: Center(child: Image.asset('cutouts/verify-otp/Banner@2x.png'))),
+                            Center(
+                              child: Text('Verify OTP',
+                              style: Style.headerTextStyle,
+                              ),
+                            ),
+                            SizedBox(height: 1.95*h,),
+                            Center(
+                              child: Text('Please enter the 4-digit OTP number received on',
+                              style: Style.descTextStyle,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 1.95*h,
+                            ),
+                            Center(
+                              child: Text('+91 ${args.phoneNo}',
+                              style: Style.desc1TextStyle,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 2.43*h,
+                            ),
+                            Padding(
+                              padding:EdgeInsets.only(left:9.24*w,right:6.81*w),
+                              child: OtpForm(phNo: args.phoneNo,),
+                            ),
 
+
+                          ],
+                        ),
+
+                    ),
                   ),
-                ),
-            ],
-          ),
+              ],
+            ),
         ),
+
       ),
     );
 
@@ -161,6 +218,10 @@ class _OtpFormState extends State<OtpForm> with TickerProviderStateMixin{
   TextEditingController pin2Controller = TextEditingController();
   TextEditingController pin3Controller = TextEditingController();
   TextEditingController pin4Controller = TextEditingController();
+
+  double h = SizeConfig.heightMultiplier;
+  double w = SizeConfig.widthMultiplier;
+
 
 
   @override
@@ -239,14 +300,14 @@ class _OtpFormState extends State<OtpForm> with TickerProviderStateMixin{
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               SizedBox(
-                width: 50,
+                width: 12.16*w,
                 child: TextFormField(
                   controller: pin1Controller,
                   autofocus: true,
                   inputFormatters: [
                     new LengthLimitingTextInputFormatter(1),
                   ],
-                  style: TextStyle(fontSize: 20.0,),
+                  style: TextStyle(fontSize: 2.43*h,),
                   textAlign: TextAlign.center,
                   decoration: Style.otpInputDecoration,
                   keyboardType: TextInputType.phone,
@@ -256,11 +317,11 @@ class _OtpFormState extends State<OtpForm> with TickerProviderStateMixin{
                 ),
               ),
               SizedBox(
-                width: 50,
+                width: 12.16*w,
                 child: TextFormField(
                   controller: pin2Controller,
                   focusNode: pin2FocusNode,
-                  style: TextStyle(fontSize: 20.0,),
+                  style: TextStyle(fontSize: 2.43*h),
                   textAlign: TextAlign.center,
                   decoration: Style.otpInputDecoration,
                   keyboardType: TextInputType.phone,
@@ -270,11 +331,11 @@ class _OtpFormState extends State<OtpForm> with TickerProviderStateMixin{
                 ),
               ),
               SizedBox(
-                width: 50,
+                width: 12.16*w,
                 child: TextFormField(
                   controller: pin3Controller,
                   focusNode: pin3FocusNode,
-                  style: TextStyle(fontSize: 20.0,),
+                  style: TextStyle(fontSize: 2.43*h),
                   textAlign: TextAlign.center,
                   decoration: Style.otpInputDecoration,
                   keyboardType: TextInputType.phone,
@@ -284,11 +345,11 @@ class _OtpFormState extends State<OtpForm> with TickerProviderStateMixin{
                 ),
               ),
               SizedBox(
-                width: 50,
+                width: 12.16*w,
                 child: TextFormField(
                   controller: pin4Controller,
                   focusNode: pin4FocusNode,
-                  style: TextStyle(fontSize: 20.0,),
+                  style: TextStyle(fontSize: 2.43*h),
                   textAlign: TextAlign.center,
                   decoration: Style.otpInputDecoration,
                   keyboardType: TextInputType.phone,
@@ -301,7 +362,7 @@ class _OtpFormState extends State<OtpForm> with TickerProviderStateMixin{
           ),
 
           SizedBox(
-            height: 15.0,
+            height: 1.82*h,
           ),
 
           Center(
@@ -317,22 +378,25 @@ class _OtpFormState extends State<OtpForm> with TickerProviderStateMixin{
             ),
           ),
           SizedBox(
-            height: 95.0,
+            height: 11.58*h,
           ),
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.fromLTRB(3.89*w,1.95*h,3.89*w,1.95*h,),
             child: GestureDetector(
               onTap: (){
 
                 String pin = verifyOtpMethod();
-
-                _signUpBloc.add(VerifyOtpEvent(pin: pin,phNo:widget.phNo));
+                 if(pin.isEmpty || pin == null || pin == ""){
+                   Fluttertoast.showToast(msg: "please enter otp");
+                 } else {
+                   _signUpBloc.add(VerifyOtpEvent(pin: pin, phNo: widget.phNo));
+                 }
 
 
               },
               child: Container(
-                height: 50.0,
-                width: 296.0,
+                height: 6.09*h,
+                width: 72.01*w,
                 decoration: BoxDecoration(
                     color: Style.inkBlueColor,
                     borderRadius: BorderRadius.circular(5.0)

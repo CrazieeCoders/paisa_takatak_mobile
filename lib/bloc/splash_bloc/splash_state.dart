@@ -22,6 +22,42 @@ class SignedInState extends SplashState{
 }
 
 
+class HouseHoldFormSuccessState extends SplashState{
+  @override
+  // TODO: implement props
+  List<Object> get props =>[];
+}
+
+
+class LoanFormPageState extends SplashState{
+  @override
+  // TODO: implement props
+  List<Object> get props =>[];
+}
+
+
+
+class LoanAppProcessSuccessState extends SplashState{
+  @override
+  // TODO: implement props
+  List<Object> get props =>[];
+}
+
+
+class LoanAgreementPageState extends SplashState{
+  @override
+  // TODO: implement props
+  List<Object> get props =>[];
+}
+
+
+
+class HouseHoldFormPageState extends SplashState{
+  @override
+  // TODO: implement props
+  List<Object> get props =>[];
+}
+
 class NotSignedInState extends SplashState{
   @override
   // TODO: implement props
@@ -45,8 +81,18 @@ class LoanAgrementState extends SplashState{
 }
 
 
+class LoanConfirmPageState extends SplashState{
+  @override
+  // TODO: implement props
+  List<Object> get props =>[];
 
-class DocumentuploadSuccessState extends SplashState{
+}
+
+
+
+
+
+class DocumentuploadPageState extends SplashState{
   @override
   // TODO: implement props
   List<Object> get props =>[];

@@ -5,19 +5,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paisa_takatak_mobile/Themes/Style.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:paisa_takatak_mobile/Widgets/countDown_Timer.dart';
+import 'package:paisa_takatak_mobile/Widgets/internet_connectivity.dart';
 import 'package:paisa_takatak_mobile/Widgets/loading_Indicator.dart';
 import 'package:paisa_takatak_mobile/bloc/loanAgreement_bloc/loanAgreement_bloc.dart';
 import 'package:paisa_takatak_mobile/bloc/loanAgreement_bloc/loanAgreement_event.dart';
 import 'package:paisa_takatak_mobile/bloc/loanAgreement_bloc/loanAgreement_state.dart';
+import 'package:paisa_takatak_mobile/bloc/network_bloc/network_bloc.dart';
+import 'package:paisa_takatak_mobile/bloc/network_bloc/network_state.dart';
 import 'package:paisa_takatak_mobile/data/sharedPref.dart';
 import 'package:paisa_takatak_mobile/services/api_services.dart';
+import 'package:paisa_takatak_mobile/Themes/size_config.dart';
 
 
 class LoanAgreementFormProvider extends StatelessWidget {
+
+  SharedPrefs sharedPrefs = SharedPrefs();
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<AgreementBloc>(
-      create: (context)=>AgreementBloc(),
+      create: (context)=>AgreementBloc()..add(AgreementSendOtpEvent(
+          phNo: sharedPrefs.getPhone)),
         child: LoanAgreementForm());
   }
 }
@@ -35,6 +43,8 @@ class _LoanAgreementFormState extends State<LoanAgreementForm> {
   SharedPrefs sharedPrefs = SharedPrefs();
   APIService apiService = APIService();
 
+  double h = SizeConfig.heightMultiplier;
+  double w = SizeConfig.widthMultiplier;
 
 
   @override
@@ -72,11 +82,11 @@ class _LoanAgreementFormState extends State<LoanAgreementForm> {
           backgroundColor: Style.paleYellow,
           elevation: 0.0,
           centerTitle: true,
-          leading: GestureDetector(
+        /*  leading: GestureDetector(
               onTap: () {
                 Navigator.pop(context);
               },
-              child: Image.asset('cutouts/verify-otp/Icon-Arrow-Left@1.5x.png')),
+              child: Image.asset('cutouts/verify-otp/Icon-Arrow-Left@1.5x.png')),*/
         ),
         body: Stack(
           children: [
@@ -93,7 +103,7 @@ class _LoanAgreementFormState extends State<LoanAgreementForm> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+              padding:EdgeInsets.fromLTRB(3.89*w, 0.0, 3.89*w, 1.95*h),
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5.0),
@@ -101,41 +111,41 @@ class _LoanAgreementFormState extends State<LoanAgreementForm> {
                 ),
                 child: ListView(
                   children: [
-                    SizedBox(height: 20.0,),
+                    SizedBox(height: 2.43*h,),
                     Center(
                     child: Text(
                       'Sign Loan Agreement with OTP',
                       style: Style.headerTextStyle,
                     ),
                   ),
-                  SizedBox(height:28.0),
+                  SizedBox(height:3.42*h),
                     Padding(
-                      padding: const EdgeInsets.only(left:20.0),
+                      padding: EdgeInsets.only(left:4.86*w),
                       child: Text('Agreement Statement',
                       style: Style.header1TextStyle,),
                     ),
                     SizedBox(
-                      height: 20.0,
+                      height: 2.43*h,
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left:20.0,right: 20.0),
+                      padding:EdgeInsets.only(left:4.86*w,right: 4.86*w),
                       child: Card(
                         elevation: 1.0,
                         child: Container(
-                          height: 180,
-                          width: 200,
+                          height: 21.95*h,
+                          width: 48.66*w,
                           color:Style.paleYellow,
                         ),
                       ),
                     ),
                     SizedBox(
-                      height: 16.0,
+                      height: 1.95*h,
                     ),
                     Card(
                       elevation: 1.0,
                       child: Container(
                         child: Padding(
-                          padding: const EdgeInsets.only(top:20.0,bottom: 20.0,left: 20.0),
+                          padding:EdgeInsets.only(top:2.43*h,bottom: 2.43*h,left: 4.86*w),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,7 +170,7 @@ class _LoanAgreementFormState extends State<LoanAgreementForm> {
                                 ],
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(left:40.0),
+                                padding: EdgeInsets.only(left:9.73*w),
                                 child: Text('by providing OTP',
                                   style:Style.checkBoxTextStyle),
                               ),
@@ -170,13 +180,13 @@ class _LoanAgreementFormState extends State<LoanAgreementForm> {
                       ),
                     ),
 
-                    SizedBox(height: 16.0,),
+                    SizedBox(height: 1.95*h,),
 
                     Center(
                       child: Text('Please enter the 4 digit OTP number received on ',
                       style: Style.descTextStyle,),
                     ),
-                    SizedBox(height: 16.0,),
+                    SizedBox(height: 1.95*h,),
 
                     sharedPrefs.getPhone!= null?
                     Center(
@@ -189,14 +199,14 @@ class _LoanAgreementFormState extends State<LoanAgreementForm> {
                     ),
 
                     SizedBox(
-                      height: 20.0,
+                      height: 2.43*h,
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left:38.0,right: 28.0),
+                      padding: EdgeInsets.only(left:9.24*w,right: 6.81*w),
                       child: OtpForm(phNo: sharedPrefs.getPhone,checkBox:checkBoxValue),
                     ),
                     SizedBox(
-                      height: 35.0,
+                      height: 4.26*h,
                     ),
                   ],
                 ),
@@ -240,6 +250,11 @@ class _OtpFormState extends State<OtpForm> with TickerProviderStateMixin{
   TextEditingController pin3Controller = TextEditingController();
   TextEditingController pin4Controller = TextEditingController();
 
+
+  double h = SizeConfig.heightMultiplier;
+  double w = SizeConfig.widthMultiplier;
+
+  int flag =0;
 
   @override
   void initState() {
@@ -302,142 +317,163 @@ class _OtpFormState extends State<OtpForm> with TickerProviderStateMixin{
         pin = '${pin1Controller.text}${pin2Controller.text}${pin3Controller
             .text}${pin4Controller.text}';
         _formKey.currentState.reset();
+
+        pin1Controller.clear();
+        pin2Controller.clear();
+        pin3Controller.clear();
+        pin4Controller.clear();
+
         return pin;
 
       }
 
     }
 
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
+    return BlocListener<NetworkBloc,NetworkState>(
+        listener: (context,state){
 
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              SizedBox(
-                width: 50,
-                child: TextFormField(
-                  controller: pin1Controller,
-                  autofocus: true,
-                  inputFormatters: [
-                    new LengthLimitingTextInputFormatter(1),
-                  ],
-                  style: TextStyle(fontSize: 20.0,),
-                  textAlign: TextAlign.center,
-                  decoration: Style.otpInputDecoration,
-                  keyboardType: TextInputType.phone,
-                  onChanged: (value){
-                    nextField(value: value,focusNode: pin2FocusNode);
-                  },
-                ),
-              ),
-              SizedBox(
-                width: 50,
-                child: TextFormField(
-                  controller: pin2Controller,
-                  focusNode: pin2FocusNode,
-                  style: TextStyle(fontSize: 20.0,),
-                  textAlign: TextAlign.center,
-                  decoration: Style.otpInputDecoration,
-                  keyboardType: TextInputType.phone,
-                  onChanged: (value){
-                    nextField(value: value,focusNode: pin3FocusNode);
-                  },
-                ),
-              ),
-              SizedBox(
-                width: 50,
-                child: TextFormField(
-                  controller: pin3Controller,
-                  focusNode: pin3FocusNode,
-                  style: TextStyle(fontSize: 20.0,),
-                  textAlign: TextAlign.center,
-                  decoration: Style.otpInputDecoration,
-                  keyboardType: TextInputType.phone,
-                  onChanged: (value){
-                    nextField(value: value,focusNode: pin4FocusNode);
-                  },
-                ),
-              ),
-              SizedBox(
-                width: 50,
-                child: TextFormField(
-                  controller: pin4Controller,
-                  focusNode: pin4FocusNode,
-                  style: TextStyle(fontSize: 20.0,),
-                  textAlign: TextAlign.center,
-                  decoration: Style.otpInputDecoration,
-                  keyboardType: TextInputType.phone,
-                  onChanged: (value){
-                    pin4FocusNode.unfocus();
-                  },
-                ),
-              ),
-            ],
-          ),
+      if(state is ConnectionFailure){
+        flag = 1;
+        InternetConnectivity.show(context);
+      }else if(state is ConnectionSuccess){
+        if(flag ==1) {
+          InternetConnectivity.hide(context);
+        }
 
-          SizedBox(
-            height: 15.0,
-          ),
+      }
+    },
 
-          Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Text('Resend OTP :',
-                  style: Style.descTextStyle,),
-                Countdown(
-                  animation: _stepTween.animate(_controller),
+                SizedBox(
+                  width: 12.16*w,
+                  child: TextFormField(
+                    controller: pin1Controller,
+                    autofocus: true,
+                    inputFormatters: [
+                      new LengthLimitingTextInputFormatter(1),
+                    ],
+                    style: TextStyle(fontSize: 2.43*h,),
+                    textAlign: TextAlign.center,
+                    decoration: Style.otpInputDecoration,
+                    keyboardType: TextInputType.phone,
+                    onChanged: (value){
+                      nextField(value: value,focusNode: pin2FocusNode);
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: 12.16*w,
+                  child: TextFormField(
+                    controller: pin2Controller,
+                    focusNode: pin2FocusNode,
+                    style: TextStyle(fontSize: 2.43*h,),
+                    textAlign: TextAlign.center,
+                    decoration: Style.otpInputDecoration,
+                    keyboardType: TextInputType.phone,
+                    onChanged: (value){
+                      nextField(value: value,focusNode: pin3FocusNode);
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: 12.16*w,
+                  child: TextFormField(
+                    controller: pin3Controller,
+                    focusNode: pin3FocusNode,
+                    style: TextStyle(fontSize: 2.43*h,),
+                    textAlign: TextAlign.center,
+                    decoration: Style.otpInputDecoration,
+                    keyboardType: TextInputType.phone,
+                    onChanged: (value){
+                      nextField(value: value,focusNode: pin4FocusNode);
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: 12.16*w,
+                  child: TextFormField(
+                    controller: pin4Controller,
+                    focusNode: pin4FocusNode,
+                    style: TextStyle(fontSize:2.43*h,),
+                    textAlign: TextAlign.center,
+                    decoration: Style.otpInputDecoration,
+                    keyboardType: TextInputType.phone,
+                    onChanged: (value){
+                      pin4FocusNode.unfocus();
+                    },
+                  ),
                 ),
               ],
             ),
-          ),
-          SizedBox(
-            height: 95.0,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: GestureDetector(
-              onTap: (){
+
+            SizedBox(
+              height: 1.82*h,
+            ),
+
+            Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Resend OTP :',
+                    style: Style.descTextStyle,),
+                  Countdown(
+                    animation: _stepTween.animate(_controller),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 11.58*h,
+            ),
+            Padding(
+              padding:  EdgeInsets.fromLTRB(3.89*w,1.95*h,3.89*w,1.95*h,),
+              child: GestureDetector(
+                onTap: (){
 
 
-                if(widget.checkBox) {
-                  sharedPrefs.setLoanStatus(1);
+                  if(widget.checkBox) {
+                    sharedPrefs.setLoanStatus(1);
 
-                  String pin = verifyOtpMethod();
+                    String pin = verifyOtpMethod();
 
-                  _agreementBloc.add(AgreementVerifyOtpEvent(pin: pin,phNo:widget.phNo));
+                   if(pin.isEmpty || pin == null || pin == ""){
+                     Fluttertoast.showToast(msg: "please enter otp");
+                         } else {
+                     _agreementBloc.add(
+                         AgreementVerifyOtpEvent(pin: pin, phNo: widget.phNo));
+                   }
 
-                }else{
-                  Fluttertoast.showToast(msg: "Please accept the terms and conditions",
-                    toastLength: Toast.LENGTH_LONG,
-                  );
-                }
+                  }else{
+                    Fluttertoast.showToast(msg: "Please accept the terms and conditions",
+                      toastLength: Toast.LENGTH_LONG,
+                    );
+                  }
 
+                },
+                child: Container(
+                  height: 6.09*h,
+                  width: 72.01*w,
+                  decoration: BoxDecoration(
+                      color: Style.inkBlueColor,
+                      borderRadius: BorderRadius.circular(5.0)
+                  ),
+                  child: Center(child: Text('Verify with OTP',
+                    style: Style.button2TextStyle,
+                  ),
 
-
-
-
-
-              },
-              child: Container(
-                height: 50.0,
-                width: 296.0,
-                decoration: BoxDecoration(
-                    color: Style.inkBlueColor,
-                    borderRadius: BorderRadius.circular(5.0)
-                ),
-                child: Center(child: Text('Verify with OTP',
-                  style: Style.button2TextStyle,
-                ),
-
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
 

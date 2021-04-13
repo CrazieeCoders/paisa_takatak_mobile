@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paisa_takatak_mobile/Themes/size_config.dart';
 
 class Style{
 
@@ -6,8 +7,10 @@ class Style{
 
   static const Color inkBlueColor = const Color(0xFF1B1C77);
   static const Color whiteColor = const Color(0xFFFFFFFF);
-  static const Color paleYellow = const Color(0xFFFFBE69);
-  static const Color palePurple = const Color(0xFFAA7DFF);
+  //static const Color paleYellow = const Color(0xFFFFBE69);
+  static const Color paleYellow = Colors.greenAccent;
+  //static const Color palePurple = const Color(0xFFAA7DFF);
+  static const Color palePurple = Colors.yellow;
   static const Color blackTextColor = const Color(0xFF686868);
   static const Color placeHolderColor = const Color(0xFFBDBDBD);
   static const Color onclickBorderColor = const Color(0xFFFB9090);
@@ -16,16 +19,20 @@ class Style{
 
 
 
+  static double h = SizeConfig.heightMultiplier;
+  static double w = SizeConfig.widthMultiplier;
+
+
   static final TextStyle button1TextStyle =TextStyle(
     fontFamily:'Poppins',
      color: Style.inkBlueColor,
-     fontSize: 16.0,
+     fontSize: 1.95*h,
   );
 
   static final TextStyle button2TextStyle =TextStyle(
       color:whiteColor,
       fontFamily:'Poppins',
-       fontSize: 16.0,
+       fontSize:1.95*h,
      decoration: TextDecoration.none
 
   );
@@ -34,13 +41,13 @@ class Style{
   static final TextStyle textStyle1 =TextStyle(
       color:blackTextColor,
       fontFamily:'Roboto',
-      fontSize: 14.0,
+      fontSize: 1.70*h,
       decoration: TextDecoration.none
   );
 
   static final TextStyle prefixTextStyle = TextStyle(
      fontFamily: 'Poppins',
-     fontSize: 20.0,
+     fontSize: 2.43*h,
      color: const Color(0xFF4F4F4F),
     letterSpacing: 1.0,
    // height: 22.0
@@ -48,7 +55,7 @@ class Style{
 
   static final TextStyle phoneTextStyle = TextStyle(
       fontFamily: 'Poppins',
-      fontSize: 20.0,
+      fontSize: 2.43*h,
       color: const Color(0xFF242424),
       letterSpacing: 1.0,
      // height: 22.0
@@ -56,88 +63,88 @@ class Style{
 
   static final TextStyle headerTextStyle = TextStyle(
         fontFamily: 'Poppins',
-        fontSize: 20.0,
+        fontSize:2.43*h,
         color: Color(0xFF32338C),
         decoration: TextDecoration.none
     );
   static final TextStyle subHeaderTextStyle = TextStyle(
       fontFamily: 'Poppins',
-      fontSize: 17.0,
+      fontSize: 2.07*h,
       color: Color(0xFF32338C),
       decoration: TextDecoration.none
   );
   static final TextStyle header1TextStyle = TextStyle(
     fontFamily: 'Roboto Bold',
-    fontSize: 14.0,
+    fontSize: 1.70*h,
     color: Color(0xFF4F4F4F),
   );
 
 
   static final TextStyle appBarStyle =  TextStyle(
       fontFamily: 'Poppins',
-      fontSize: 14.0,
+      fontSize: 1.70*h,
       letterSpacing: 0.15,
       color: const Color(0xFF1B1C77),
       decoration: TextDecoration.none
   );
 
   static final TextStyle normalTextStyle = TextStyle(
-      fontSize: 12.0,
+      fontSize:  1.46*h,
       color: Colors.black,
       decoration: TextDecoration.none
   );
   static final TextStyle descTextStyle = TextStyle(
       fontFamily: 'Roboto',
-      fontSize: 12.0,
+      fontSize:  1.46*h,
       color: Color(0xFF686868),
       decoration: TextDecoration.none
   );
   static final TextStyle desc1TextStyle = TextStyle(
       fontFamily: 'Roboto',
-      fontSize: 16.0,
+      fontSize: 1.95*h,
       color: Color(0xFF4F4F4F),
       decoration: TextDecoration.none
   );
   static final TextStyle desc2TextStyle = TextStyle(
       fontFamily: 'Roboto',
-      fontSize: 14.0,
+      fontSize:  1.70*h,
       color: Color(0xFF828282)
   );
   static final TextStyle hintTextStyle =  TextStyle(
       fontFamily: 'Roboto',
-      fontSize: 10.0,
+      fontSize: 1.21*h,
       color: darkPinkColor,
       decoration: TextDecoration.none
   );
 
   static final TextStyle suffixTextStyle = TextStyle(
   fontFamily: 'Roboto',
-  fontSize: 12,
+  fontSize:  1.46*h,
   color: Color(0xFF7371FC)
   );
 
   static final TextStyle dropdownTextStyle = TextStyle(
     fontFamily: 'Roboto Bold',
-    fontSize: 12.0,
+    fontSize: 1.46*h,
     color: Color(0xFF262222),
   );
 
   static final TextStyle checkBoxTextStyle =  TextStyle(
       fontFamily: 'Roboto',
-      fontSize: 12.0,
+      fontSize: 1.46*h,
       color: Color(0xFF1B1C77)
   );
 
 
   static final TextStyle input1TextStyle =  TextStyle(
   fontFamily: 'Roboto Bold',
-  fontSize: 28.0,
+  fontSize: 3.41*h,
   color: Color(0xFF4F4F4F)
   );
 
   static final TextStyle input2TextStyle = TextStyle(
       fontFamily: 'Roboto Bold',
-      fontSize: 16.0,
+      fontSize: 1.95*h,
       color: Color(0xFF262222)
   );
 
