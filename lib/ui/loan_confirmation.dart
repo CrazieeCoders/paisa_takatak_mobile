@@ -105,6 +105,9 @@ class _LoanConfirmationState extends State<LoanConfirmation> {
 
                        GestureDetector(
                         onTap: (){
+                          Navigator.pushNamedAndRemoveUntil(
+                            context, '/paymentPage', (route) => false,
+                          );
                         },
                            child: Container(
                              height:6.09*h,
@@ -127,6 +130,9 @@ class _LoanConfirmationState extends State<LoanConfirmation> {
                          ),
                          GestureDetector(
                            onTap: (){
+                             Navigator.pushNamedAndRemoveUntil(
+                               context, '/paymentPage', (route) => false,
+                             );
                            },
                            child: Container(
                              height: 6.09*h,

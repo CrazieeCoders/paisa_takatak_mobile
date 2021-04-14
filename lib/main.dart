@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
                   '/loanDetailForm':(context) =>LoanDetailFormProvider(),
                   '/loanAgreement':(context) =>LoanAgreementFormProvider(),
                   '/loanConfirmation':(context) =>LoanConfirmation(),
-                  '/paymentPage':(context) =>PaymentPage(),
+                  '/paymentPage':(context) =>PaymentPageProvider(),
                 },
 
               ),

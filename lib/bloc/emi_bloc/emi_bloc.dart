@@ -3,7 +3,6 @@ import 'package:paisa_takatak_mobile/bloc/emi_bloc/emi_event.dart';
 import 'package:paisa_takatak_mobile/bloc/emi_bloc/emi_state.dart';
 import 'package:paisa_takatak_mobile/data/sharedPref.dart';
 import 'package:paisa_takatak_mobile/services/api_services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class EmiBloc extends Bloc<EmiEvent,EmiState>{
 

@@ -73,6 +73,7 @@ class APIService{
      print('Came after Http post');
     final validateModel = validateModelFromJson(res.body);
 
+    print('${res.body}');
     print('${validateModel.responseStatus}');
 
 
