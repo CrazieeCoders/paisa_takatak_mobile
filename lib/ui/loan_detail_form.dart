@@ -38,8 +38,7 @@ class LoanDetailForm extends StatefulWidget {
 
 class _LoanDetailFormState extends State<LoanDetailForm> {
   String _chosenValue;
-  static File imageFile;
-  BankStatBloc bankStatBloc;
+
   EmiBloc emiBloc;
 
   SharedPrefs sharedPrefs = SharedPrefs();
@@ -109,7 +108,7 @@ class _LoanDetailFormState extends State<LoanDetailForm> {
             );
           }else if (state is EmiFailureState){
             LoadingDialog.hide(context);
-            Fluttertoast.showToast(msg: "Failed to Update Server!!",
+            Fluttertoast.showToast(msg: "Failed to update server",
                 toastLength: Toast.LENGTH_LONG
             );
           }
@@ -177,9 +176,9 @@ class _LoanDetailFormState extends State<LoanDetailForm> {
                                     ),
                                     validator: (amount) {
                                       if (amount.isEmpty || amount == '') {
-                                        return 'please enter the number of dependents';
+                                        return 'Please enter the number of dependents';
                                       }else if(int.parse(amount) > 99){
-                                        return ' number of dependents should be lesser than 100';
+                                        return ' Please enter number of dependents lesser than 100';
                                       }
                                       return null;
                                     },
@@ -247,7 +246,7 @@ class _LoanDetailFormState extends State<LoanDetailForm> {
                                         padding: EdgeInsets.only(
                                             left: 4.86*w, bottom: 1.21*h, top: 3.65*h),
                                         child: Text(
-                                          '1st Emi Amount',
+                                          '1st EMI Amount',
                                           style: Style.desc2TextStyle,
                                         ),
                                       ),
@@ -273,9 +272,9 @@ class _LoanDetailFormState extends State<LoanDetailForm> {
                                               ),
                                               validator: (amount) {
                                                 if (amount.isEmpty || amount == '') {
-                                                  return 'please enter the 1st EMI amount';
+                                                  return 'Please enter the 1st EMI amount';
                                                 }else if(int.parse(amount) > 99999){
-                                                  return 'Emi must be lesser than 100000';
+                                                  return 'Please enter EMI amount lesser than 100000';
                                                 }
                                                 return null;
                                               },
@@ -295,7 +294,7 @@ class _LoanDetailFormState extends State<LoanDetailForm> {
                                         padding:  EdgeInsets.only(
                                             left: 4.86*w, bottom: 1.21*h, top: 3.65*h),
                                         child: Text(
-                                          '1st Emi Amount',
+                                          '1st EMI Amount',
                                           style: Style.desc2TextStyle,
                                         ),
                                       ),
@@ -321,9 +320,9 @@ class _LoanDetailFormState extends State<LoanDetailForm> {
                                               ),
                                               validator: (amount) {
                                                 if (amount.isEmpty || amount == '') {
-                                                  return 'please enter the 1st Emi amount';
+                                                  return 'Please enter the 1st EMI amount';
                                                 }else if(int.parse(amount) > 99999){
-                                                  return 'Emi should be lesser than 100000';
+                                                  return 'Please enter EMI amount lesser than 100000';
                                                 }
                                                 return null;
                                               },
@@ -335,7 +334,7 @@ class _LoanDetailFormState extends State<LoanDetailForm> {
                                         padding: EdgeInsets.only(
                                             left: 4.86*w, bottom:1.21*h, top:3.65*h),
                                         child: Text(
-                                          '2nd Emi Amount',
+                                          '2nd EMI Amount',
                                           style: Style.desc2TextStyle,
                                         ),
                                       ),
@@ -361,9 +360,9 @@ class _LoanDetailFormState extends State<LoanDetailForm> {
                                               ),
                                               validator: (amount) {
                                                 if (amount.isEmpty || amount == '') {
-                                                  return 'please enter the 2nd EMI amount';
+                                                  return 'Please enter the 2nd EMI amount';
                                                 }else if(int.parse(amount) > 99999){
-                                                  return 'Emi should be lesser than 100000';
+                                                  return 'Please enter EMI amount lesser than 100000';
                                                 }
                                                 return null;
                                               },
@@ -382,7 +381,7 @@ class _LoanDetailFormState extends State<LoanDetailForm> {
                                         padding: EdgeInsets.only(
                                             left: 4.86*w, bottom: 1.21*h, top:3.65*h),
                                         child: Text(
-                                          '1st Emi Amount',
+                                          '1st EMI Amount',
                                           style: Style.desc2TextStyle,
                                         ),
                                       ),
@@ -408,9 +407,9 @@ class _LoanDetailFormState extends State<LoanDetailForm> {
                                               ),
                                               validator: (amount) {
                                                 if (amount.isEmpty || amount == '') {
-                                                  return 'please enter the 1st EMI amount';
+                                                  return 'Please enter the 1st EMI amount';
                                                 }else if(int.parse(amount) > 99999){
-                                                  return 'Emi should be lesser than 100000';
+                                                  return 'Please enter the EMI amount lesser than 100000';
                                                 }
                                                 return null;
                                               },
@@ -422,7 +421,7 @@ class _LoanDetailFormState extends State<LoanDetailForm> {
                                         padding: EdgeInsets.only(
                                             left: 4.86*w, bottom: 1.21*h, top:3.65*h),
                                         child: Text(
-                                          '2nd Emi Amount',
+                                          '2nd EMI Amount',
                                           style: Style.desc2TextStyle,
                                         ),
                                       ),
@@ -448,9 +447,9 @@ class _LoanDetailFormState extends State<LoanDetailForm> {
                                               ),
                                               validator: (amount) {
                                                 if (amount.isEmpty || amount == '') {
-                                                  return 'please enter the 2nd EMI amount';
+                                                  return 'Please enter the 2nd EMI amount';
                                                 }else if(int.parse(amount) > 99999){
-                                                  return 'Emi should be lesser than 100000';
+                                                  return 'Please enter the EMI amount lesser than 100000';
                                                 }
                                                 return null;
                                               },
@@ -462,7 +461,7 @@ class _LoanDetailFormState extends State<LoanDetailForm> {
                                         padding: EdgeInsets.only(
                                             left: 4.86*w, bottom: 1.21*h, top:3.65*h),
                                         child: Text(
-                                          '3rd Emi Amount',
+                                          '3rd EMI Amount',
                                           style: Style.desc2TextStyle,
                                         ),
                                       ),
@@ -488,9 +487,9 @@ class _LoanDetailFormState extends State<LoanDetailForm> {
                                               ),
                                               validator: (amount) {
                                                 if (amount.isEmpty || amount == '') {
-                                                  return 'please enter the 3rd EMI amount';
+                                                  return 'Please enter the 3rd EMI amount';
                                                 }else if(int.parse(amount) > 99999){
-                                                  return 'Emi should be lesser than 100000';
+                                                  return 'Please enter 3rd EMI amount lesser than 100000';
                                                 }
                                                 return null;
                                               },
@@ -534,9 +533,9 @@ class _LoanDetailFormState extends State<LoanDetailForm> {
                                     ),
                                     validator: (amount) {
                                       if (amount.isEmpty || amount == '') {
-                                        return 'please enter the monthly income';
+                                        return 'Please enter the monthly income';
                                       }else if(int.parse(amount) > 999999){
-                                        return 'monthly income should be lesser than 10lakh ';
+                                        return 'Please enter monthly income lesser than 10 lakh ';
                                       }
                                       return null;
                                     },
@@ -574,9 +573,9 @@ class _LoanDetailFormState extends State<LoanDetailForm> {
                                     ),
                                     validator: (amount) {
                                       if (amount.isEmpty || amount == '') {
-                                        return 'please enter the household expense';
+                                        return 'Please enter the household expense';
                                       }else if(int.parse(amount) > 999999){
-                                        return 'Household Expense should be lesser than 10 lakh';
+                                        return 'Please enter household expense lesser than 10 lakh';
                                       }
                                       return null;
                                     },
@@ -592,7 +591,7 @@ class _LoanDetailFormState extends State<LoanDetailForm> {
 
                                   if(_formKey.currentState.validate()) {
                                     if (_chosenValue == null) {
-                                      Fluttertoast.showToast(msg: "please select number of EMI's", toastLength: Toast.LENGTH_SHORT);
+                                      Fluttertoast.showToast(msg: "Please select number of EMI's", toastLength: Toast.LENGTH_SHORT);
                                     } else {
 
                                         String noOfDependents = _noOfDependentsController

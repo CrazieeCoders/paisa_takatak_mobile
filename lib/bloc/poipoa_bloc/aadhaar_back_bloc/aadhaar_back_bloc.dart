@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'aadhaar_back_states.dart';
 import 'aadhar_back_events.dart';
 import 'package:paisa_takatak_mobile/data/sharedPref.dart';
+import 'package:paisa_takatak_mobile/Exception/custom_exception.dart';
 
 
 class AadhaarBackBloc extends Bloc<AadhaarBackEvent,AadhaarBackState>{
@@ -27,8 +28,10 @@ class AadhaarBackBloc extends Bloc<AadhaarBackEvent,AadhaarBackState>{
         await apiService.uploadFilesAndImages(file: event.img,fileName:'aadhar_card_back',ph: sharedPrefs.getPhone);
         yield AadhaarBackSuccessState();
         prefs.setInt('aadharBack', 1);
+      }on InvalidFileException{
+        yield AadhaarBackFailureState(errMsg:"Please upload a valid aadhar card");
       }catch(e){
-        yield AadhaarBackFailureState();
+        yield AadhaarBackFailureState(errMsg:"Unable to upload the document");
       }
     }
 

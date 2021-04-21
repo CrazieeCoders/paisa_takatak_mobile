@@ -1,15 +1,15 @@
 // To parse this JSON data, do
 //
-//     final validateModel = validateModelFromJson(jsonString);
+//     final uploadFileErrorModel = uploadFileErrorModelFromJson(jsonString);
 
 import 'dart:convert';
 
-ValidateModel validateModelFromJson(String str) => ValidateModel.fromJson(json.decode(str));
+UploadFileErrorModel uploadFileErrorModelFromJson(String str) => UploadFileErrorModel.fromJson(json.decode(str));
 
-String validateModelToJson(ValidateModel data) => json.encode(data.toJson());
+String uploadFileErrorModelToJson(UploadFileErrorModel data) => json.encode(data.toJson());
 
-class ValidateModel {
-  ValidateModel({
+class UploadFileErrorModel {
+  UploadFileErrorModel({
     this.responseStatus,
     this.responseStatusCode,
     this.responseObject,
@@ -19,7 +19,7 @@ class ValidateModel {
   int responseStatusCode;
   List<ResponseObject> responseObject;
 
-  factory ValidateModel.fromJson(Map<String, dynamic> json) => ValidateModel(
+  factory UploadFileErrorModel.fromJson(Map<String, dynamic> json) => UploadFileErrorModel(
     responseStatus: json["responseStatus"],
     responseStatusCode: json["responseStatusCode"],
     responseObject: List<ResponseObject>.from(json["responseObject"].map((x) => ResponseObject.fromJson(x))),
@@ -44,6 +44,7 @@ class ResponseObject {
     this.updatedDate,
     this.fileSize,
     this.id,
+    this.ocrResponse,
   });
 
   String number;
@@ -56,6 +57,7 @@ class ResponseObject {
   dynamic updatedDate;
   int fileSize;
   dynamic id;
+  OcrResponse ocrResponse;
 
   factory ResponseObject.fromJson(Map<String, dynamic> json) => ResponseObject(
     number: json["number"],
@@ -68,6 +70,7 @@ class ResponseObject {
     updatedDate: json["updatedDate"],
     fileSize: json["fileSize"],
     id: json["id"],
+    ocrResponse: OcrResponse.fromJson(json["ocrResponse"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -81,5 +84,22 @@ class ResponseObject {
     "updatedDate": updatedDate,
     "fileSize": fileSize,
     "id": id,
+    "ocrResponse": ocrResponse.toJson(),
+  };
+}
+
+class OcrResponse {
+  OcrResponse({
+    this.responseObject,
+  });
+
+  dynamic responseObject;
+
+  factory OcrResponse.fromJson(Map<String, dynamic> json) => OcrResponse(
+    responseObject: json["responseObject"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "responseObject": responseObject,
   };
 }

@@ -241,7 +241,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           },
                           child: Padding(
                             padding:
-                                EdgeInsets.only(left: 13 * w, right: 9.24 * w),
+                                EdgeInsets.only(left: 13 * w, right: 9.24 * w,bottom: 1.21*h),
                             child: Container(
                               height: 6.09 * h,
                               width: 72.01 * w,

@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:paisa_takatak_mobile/Exception/custom_exception.dart';
 import 'package:paisa_takatak_mobile/bloc/loanform_bloc/loaform_event.dart';
 import 'package:paisa_takatak_mobile/bloc/loanform_bloc/loanform_state.dart';
 import 'package:paisa_takatak_mobile/data/sharedPref.dart';
@@ -23,7 +24,9 @@ class LoanFormBloc extends Bloc<LoanFormEvent,LoanFormState>{
         await apiService.registerLoanForm(event.registerationInfo);
         _sharedPrefs.setLoanApplicationForm(1);
         yield LoanFormSuccessState();
-      }catch(e){
+      }on AppException{
+        yield LoanFormFailureState();
+      } catch(e){
         yield LoanFormFailureState();
       }
     }

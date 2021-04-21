@@ -385,7 +385,8 @@ class _POIPageState extends State<POIPage> {
             BlocListener<PanBloc, PanState>(
               listener: (context, state) {
                 if (state is PanFailureState) {
-                  Fluttertoast.showToast(msg: "Unable to upload the document ");
+                  Fluttertoast.showToast(msg:state.errMsg,
+                  );
                 }
               },
               child: BlocBuilder<PanBloc, PanState>(
@@ -445,7 +446,7 @@ class _POIPageState extends State<POIPage> {
                           imageFile = null;
                         } catch (e) {
                           Fluttertoast.showToast(
-                              msg: "Please select a document");
+                              msg: "Please select the document");
                         }
                       },
                       child: Container(
@@ -554,7 +555,7 @@ class _POIPageState extends State<POIPage> {
             BlocListener<AadhaarFrontBloc, AadhaarFrontState>(
               listener: (context, state) {
                 if (state is AadhaarFrontFailureState) {
-                  Fluttertoast.showToast(msg: "Unable to upload the document ");
+                  Fluttertoast.showToast(msg:state.errMsg);
                 }
               },
               child: BlocBuilder<AadhaarFrontBloc, AadhaarFrontState>(
@@ -710,7 +711,7 @@ class _POIPageState extends State<POIPage> {
             BlocListener<AadhaarBackBloc, AadhaarBackState>(
               listener: (context, state) {
                 if (state is AadhaarBackFailureState) {
-                  Fluttertoast.showToast(msg: "Unable to upload the document ");
+                  Fluttertoast.showToast(msg:state.errMsg);
                 }
               },
               child: BlocBuilder<AadhaarBackBloc, AadhaarBackState>(
@@ -907,7 +908,7 @@ class _POIPageState extends State<POIPage> {
                         _chequeBloc.add(AddChequeEvent(img: imageFile));
                       } catch (e) {
                         Fluttertoast.showToast(
-                            msg: "No documents selected",
+                            msg: "No document selected",
                             toastLength: Toast.LENGTH_SHORT);
                         imageFile = null;
                       }

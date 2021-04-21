@@ -1,9 +1,8 @@
 import 'package:flutter/widgets.dart';
-import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:paisa_takatak_mobile/Exception/custom_exception.dart';
 import 'package:paisa_takatak_mobile/bloc/signUp_bloc/signUp_events.dart';
 import 'package:paisa_takatak_mobile/bloc/signUp_bloc/signUp_states.dart';
-import 'package:paisa_takatak_mobile/bloc/splash_bloc/splash_state.dart';
 import 'package:paisa_takatak_mobile/data/sharedPref.dart';
 import 'package:paisa_takatak_mobile/services/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,8 +26,9 @@ class SignUpBloc extends Bloc<OtpEvent,OtpState>{
     if(event is SendOtpEvent){
 
         yield OtpLoadingState();
-       verifyOtp = await apiService.generateOtp(event.phNo);
-        yield SendOtpState(sendOtp:event.phNo);
+        verifyOtp = await apiService.generateOtp(event.phNo);
+        yield SendOtpState(sendOtp: event.phNo);
+
 
     }else if(event is VerifyOtpEvent){
       yield OtpLoadingState();
@@ -83,7 +83,9 @@ class SignUpBloc extends Bloc<OtpEvent,OtpState>{
       yield ResendOtpSuccessState();
     }
 
-    }catch(e){
+    }on AppException{
+      yield OtpErrorState(errMsg:"unable to communicate with server");
+    } catch(e){
       yield OtpErrorState(errMsg: e.toString());
     }
   }

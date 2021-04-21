@@ -42,7 +42,18 @@ class SharedPrefs{
 
   int  get getLoanApplicationUnderProcess => _sharedPrefs.getInt("loanApplicationUnderProcess")?? 0;
 
-  String  get getAuthorizationToken => _sharedPrefs.getString("token")?? 0;
+  String  get getAuthorizationToken => _sharedPrefs.getString("token")?? '0';
+
+  String  get getPanNumber => _sharedPrefs.getString("panNumber")?? 'please enter pan number';
+
+  String  get getUserName => _sharedPrefs.getString("userName")?? 'please enter your name';
+
+  String  get getUidNumber => _sharedPrefs.getString("uidNumber")?? 'please enter your uid number';
+
+  String  get getPermanentAddress => _sharedPrefs.getString("permanentAddress")?? 'enter your address';
+
+  String  get getPinCode => _sharedPrefs.getString("pinCode")?? 'enter your pin code number';
+
 
 
   setSelfieStatus(int selfiePhoto){
@@ -94,6 +105,32 @@ class SharedPrefs{
   setAuthorizationToken(String token){
     _sharedPrefs.setString('token',token);
   }
+
+
+  // User Details
+
+  setPanNumber(String panNumber){
+    _sharedPrefs.setString('panNumber',panNumber);
+  }
+
+
+  setUserName(String userName){
+    _sharedPrefs.setString('userName',userName);
+  }
+
+  setUidNumber(String uidNumber){
+    _sharedPrefs.setString('uidNumber',uidNumber);
+  }
+
+  setPermanentAddress(String permanentAddress){
+    _sharedPrefs.setString('permanentAddress',permanentAddress);
+  }
+
+  setPinCode(String pinCode){
+    _sharedPrefs.setString('pinCode',pinCode);
+  }
+
+
 
 
 

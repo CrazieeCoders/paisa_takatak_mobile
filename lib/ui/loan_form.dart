@@ -41,8 +41,6 @@ class LoanForm extends StatefulWidget {
 class _LoanFormState extends State<LoanForm> {
 
   LoanFormBloc loanFormBloc;
-  AgreementBloc agreementBloc;
-
   double h = SizeConfig.heightMultiplier;
   double w = SizeConfig.widthMultiplier;
   int flag =0;
@@ -52,7 +50,6 @@ class _LoanFormState extends State<LoanForm> {
   Widget build(BuildContext context) {
 
     loanFormBloc = BlocProvider.of<LoanFormBloc>(context);
-    //agreementBloc = BlocProvider.of<AgreementBloc>(context);
 
 
     return MultiBlocListener(
@@ -88,7 +85,7 @@ class _LoanFormState extends State<LoanForm> {
               LoadingDialog.show(context);
             }else if(state is LoanFormFailureState){
               LoadingDialog.hide(context);
-              Fluttertoast.showToast(msg: "Failed to Update !!",
+              Fluttertoast.showToast(msg: "Failed to update",
                   toastLength: Toast.LENGTH_LONG
               );
             }
@@ -142,7 +139,7 @@ class _LoanFormState extends State<LoanForm> {
                           style: Style.subHeaderTextStyle,
                         ),
                       )),
-                      AppForm(context,loanFormBloc,agreementBloc),
+                      AppForm(context,loanFormBloc),
                     ],
                   ),
                 ),
@@ -155,7 +152,7 @@ class _LoanFormState extends State<LoanForm> {
   }
 }
 
-Widget AppForm(BuildContext context,LoanFormBloc loanFormBloc,AgreementBloc agreementBloc) {
+Widget AppForm(BuildContext context,LoanFormBloc loanFormBloc) {
 
 
   TextEditingController loanAmountController = TextEditingController();
@@ -207,16 +204,16 @@ Widget AppForm(BuildContext context,LoanFormBloc loanFormBloc,AgreementBloc agre
               ],
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.fromLTRB(2.43*w,1.21*h,2.43*w,1.21*h),
-                suffixText: 'Max 1.5Lakhs',
+                suffixText: 'Max 1.5 Lakhs',
                 suffixStyle: Style.suffixTextStyle,
                 border: InputBorder.none,
               ),
               validator: (amount) {
 
                 if(amount.isEmpty){
-                  return "Please enter the loan amount.";
-                }else if(int.parse(amount) < 1000){
-                  return "Loan amount cannot be lesser than 1000";
+                  return "Please enter the loan amount";
+                }else if(int.parse(amount) < 100){
+                  return "Please enter Loan amount lesser than 100 Rs";
                 }else if (int.parse(amount) > 150000) {
                   return "Please enter the loan amount less than 1.5 lakhs";
                 }
@@ -246,13 +243,15 @@ Widget AppForm(BuildContext context,LoanFormBloc loanFormBloc,AgreementBloc agre
               ],
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.fromLTRB(2.43*w,1.21*h,2.43*w,1.21*h),
-                suffixText: 'Max 60Months',
+                suffixText: 'Max 60 Months',
                 suffixStyle: Style.suffixTextStyle,
                 border: InputBorder.none,
               ),
               validator: (month) {
                 if(month.isEmpty){
-                  return "Please enter the Loan Tenure";
+                  return "Please enter the loan tenure";
+                }else if(int.parse(month) < 1){
+                  return "Please enter loan tenure greater than 1 month";
                 }else if (int.parse(month) > 60) {
                   return "Please enter the loan tenure less than 60 months";
                 }
@@ -287,6 +286,8 @@ Widget AppForm(BuildContext context,LoanFormBloc loanFormBloc,AgreementBloc agre
             height: 5.67*h,
             width: 87.59*w,
             child: TextFormField(
+              enabled: false,
+              readOnly: true,
               textCapitalization: TextCapitalization.sentences,
               controller: nameTextController,
               keyboardType: TextInputType.text,
@@ -297,15 +298,17 @@ Widget AppForm(BuildContext context,LoanFormBloc loanFormBloc,AgreementBloc agre
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.fromLTRB(2.43*w,1.21*h,2.43*w,1.21*h),
                 border: InputBorder.none,
+                  hintText: '${sharedPrefs.getUserName}',
+                  hintStyle: Style.input2TextStyle
               ),
-              validator: (value) {
+           /*   validator: (value) {
                 if (value.isEmpty || value == '') {
                   return "Please enter your name";
                 }else if(value.length < 3){
                   return "Please enter a valid name";
                 }
                 return null;
-              },
+              },*/
             ),
           ),
         ),
@@ -365,7 +368,7 @@ Widget AppForm(BuildContext context,LoanFormBloc loanFormBloc,AgreementBloc agre
               ),
               validator: (ph) {
                 if(ph ==''){
-                return "Please enter the secondary phone number.";
+                return "Please enter the secondary contact number";
                 }else if (ph.length != 10) {
                   return "Please enter a valid number";
                 }
@@ -387,6 +390,8 @@ Widget AppForm(BuildContext context,LoanFormBloc loanFormBloc,AgreementBloc agre
             height: 5.67*h,
             width: 87.59*w,
             child: TextFormField(
+              enabled: false,
+              readOnly: true,
               textCapitalization: TextCapitalization.sentences,
               controller: addr1TextController,
               keyboardType: TextInputType.text,
@@ -397,15 +402,17 @@ Widget AppForm(BuildContext context,LoanFormBloc loanFormBloc,AgreementBloc agre
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.fromLTRB(2.43*w,1.21*h,2.43*w,1.21*h),
                 border: InputBorder.none,
+                  hintText: '${sharedPrefs.getPermanentAddress}',
+                  hintStyle: Style.input2TextStyle
               ),
-              validator: (value) {
+             /* validator: (value) {
                 if (value.isEmpty || value == '') {
                   return "Please enter a permanent address.";
                 }else if(value.length <3){
                   return 'Please enter a valid address';
                 }
                 return null;
-              },
+              },*/
             ),
           ),
         ),
@@ -418,7 +425,7 @@ Widget AppForm(BuildContext context,LoanFormBloc loanFormBloc,AgreementBloc agre
               child: Padding(
                 padding: EdgeInsets.only(top:1.94*w),
                 child: Text(
-                  'Area PIN : ',
+                  'Area pin : ',
                   style: TextStyle(
                       fontFamily: 'Roboto', fontSize: 1.46*h, color: Color(0xFF7371FC)),
                 ),
@@ -430,8 +437,10 @@ Widget AppForm(BuildContext context,LoanFormBloc loanFormBloc,AgreementBloc agre
                 padding:EdgeInsets.only(left:1.94*w),
                 child: Container(
                   height: 5.67*h,
-                  width:20.59*w,
+                  width:68.89*w,
                   child: TextFormField(
+                    enabled: false,
+                    readOnly: true,
                     controller: pin1TextController,
                     keyboardType: TextInputType.number,
                     style: TextStyle(
@@ -444,15 +453,17 @@ Widget AppForm(BuildContext context,LoanFormBloc loanFormBloc,AgreementBloc agre
                     decoration: InputDecoration(
                       contentPadding:EdgeInsets.fromLTRB(1.94*w,0.97*h,1.94*w,0.97*h),
                       border: InputBorder.none,
+                        hintText: '${sharedPrefs.getPinCode}',
+                        hintStyle: Style.input2TextStyle
                     ),
-                    validator: (value) {
+               /*     validator: (value) {
                       if (value.isEmpty || value == '') {
                         return "Please enter the area pin.";
                       }else if(value.length !=6){
                         return "Please enter a valid pin";
                       }
                       return null;
-                    },
+                    },*/
                   ),
                 ),
               ),
@@ -485,7 +496,7 @@ Widget AppForm(BuildContext context,LoanFormBloc loanFormBloc,AgreementBloc agre
               ),
               validator: (value) {
                 if (value.isEmpty || value == '') {
-                  return "Please enter local address.";
+                  return "Please enter the local address";
                 }else if(value.length < 3){
                   return 'Please enter a valid address';
                 }
@@ -503,7 +514,7 @@ Widget AppForm(BuildContext context,LoanFormBloc loanFormBloc,AgreementBloc agre
               child: Padding(
                 padding: EdgeInsets.only(top:0.97*h),
                 child: Text(
-                  'Area PIN : ',
+                  'Area pin : ',
                   style: TextStyle(
                       fontFamily: 'Roboto', fontSize: 1.46*h, color: Color(0xFF7371FC)),
                 ),
@@ -513,7 +524,7 @@ Widget AppForm(BuildContext context,LoanFormBloc loanFormBloc,AgreementBloc agre
               elevation: 1.0,
               child: Container(
                 height: 5.67*h,
-                width: 20.59*w,
+                width:68.89*w,
                 child: TextFormField(
                   controller: pin2TextController,
                   keyboardType: TextInputType.number,
@@ -530,9 +541,9 @@ Widget AppForm(BuildContext context,LoanFormBloc loanFormBloc,AgreementBloc agre
                   ),
                   validator: (value) {
                     if (value.isEmpty || value == '') {
-                      return "please enter the area pin.";
+                      return "Please enter the Area pin";
                     }else if(value.length != 6){
-                      return "please enter a valid pin";
+                      return "Please enter a valid pin";
                     }
                     return null;
                   },
@@ -555,6 +566,8 @@ Widget AppForm(BuildContext context,LoanFormBloc loanFormBloc,AgreementBloc agre
             height: 5.67*h,
             width: 87.59*w,
             child: TextFormField(
+              enabled: false,
+              readOnly: true,
               controller: panTextController,
               keyboardType: TextInputType.text,
               style: Style.input2TextStyle,
@@ -565,15 +578,17 @@ Widget AppForm(BuildContext context,LoanFormBloc loanFormBloc,AgreementBloc agre
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.fromLTRB(2.43*w,1.21*h,2.43*w,1.21*h),
                 border: InputBorder.none,
+                  hintText: '${sharedPrefs.getPanNumber}',
+                  hintStyle: Style.input2TextStyle
               ),
-              validator: (value) {
+            /*  validator: (value) {
                 if(value == ''){
-                return "Please enter your PAN Card number.";
+                return "Please enter your PAN Card number";
                 }else if (!RegExp(r'^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$').hasMatch(value)) {
-                  return "Please enter a valid PAN card number.";
+                  return "Please enter a valid PAN card number";
                 }
                 return null;
-              },
+              },*/
             ),
           ),
         ),
@@ -590,6 +605,8 @@ Widget AppForm(BuildContext context,LoanFormBloc loanFormBloc,AgreementBloc agre
             height: 5.67*h,
             width: 87.59*w,
             child: TextFormField(
+              enabled: false,
+              readOnly: true,
               controller: uidTextController,
               keyboardType: TextInputType.number,
               style: Style.input2TextStyle,
@@ -600,16 +617,17 @@ Widget AppForm(BuildContext context,LoanFormBloc loanFormBloc,AgreementBloc agre
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.fromLTRB(2.43*w,1.21*h,2.43*w,1.21*h),
                 border: InputBorder.none,
-               //r suffixIcon: Image.asset('cutouts/POIPOA/help-icon@1x.png'),
+                  hintText: '${sharedPrefs.getUidNumber}',
+                  hintStyle: Style.input2TextStyle
               ),
-              validator: (value) {
+          /*    validator: (value) {
                  if(value == ''){
-                return 'Please enter your UID.';
+                return 'Please enter your UID';
                 }else if (value.length != 14) {
-                  return "Please enter a valid UID.";
+                  return "Please enter a valid UID";
                 }
                 return null;
-              },
+              },*/
             ),
           ),
         ),
@@ -637,7 +655,6 @@ Widget AppForm(BuildContext context,LoanFormBloc loanFormBloc,AgreementBloc agre
                       userName: nameTextController.text,
                     );
 
-                  //  agreementBloc.add(AgreementSendOtpEvent(phNo: sharedPrefs.getPhone));
                     loanFormBloc.add(AddLoanFormEvent(registerationInfo:register));
                   }
                 },

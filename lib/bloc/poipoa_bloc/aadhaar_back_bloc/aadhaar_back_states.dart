@@ -16,9 +16,13 @@ class AadhaarBackSuccessState extends AadhaarBackState{
 }
 
 class AadhaarBackFailureState extends AadhaarBackState{
+
+  String errMsg;
+
+  AadhaarBackFailureState({this.errMsg});
   @override
   // TODO: implement props
-  List<Object> get props =>[];
+  List<Object> get props =>[errMsg];
 
 }
 

@@ -387,7 +387,7 @@ class _OtpFormState extends State<OtpForm> with TickerProviderStateMixin{
 
                 String pin = verifyOtpMethod();
                  if(pin.isEmpty || pin == null || pin == ""){
-                   Fluttertoast.showToast(msg: "please enter otp");
+                   Fluttertoast.showToast(msg: "Please enter OTP");
                  } else {
                    _signUpBloc.add(VerifyOtpEvent(pin: pin, phNo: widget.phNo));
                  }

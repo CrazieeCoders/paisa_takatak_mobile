@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:paisa_takatak_mobile/Exception/custom_exception.dart';
 import 'package:paisa_takatak_mobile/bloc/emi_bloc/emi_event.dart';
 import 'package:paisa_takatak_mobile/bloc/emi_bloc/emi_state.dart';
 import 'package:paisa_takatak_mobile/data/sharedPref.dart';
@@ -41,8 +42,9 @@ class EmiBloc extends Bloc<EmiEvent,EmiState>{
         await apiService.householdForm(event.houseHold);
         prefs.setHouseholdStatus(1);
         yield EmiSuccessState();
+      }on AppException{
+        yield EmiFailureState();
       }catch(e){
-        print("Came inside Failure State");
         yield EmiFailureState();
       }
 

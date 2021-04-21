@@ -4,13 +4,19 @@ import 'package:paisa_takatak_mobile/data/sharedPref.dart';
 import 'package:paisa_takatak_mobile/model/household_model.dart';
 import 'package:paisa_takatak_mobile/model/otp_model.dart';
 import 'package:paisa_takatak_mobile/model/registeration_model.dart';
-import 'package:paisa_takatak_mobile/model/uploadFiles_model.dart';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
+import 'package:paisa_takatak_mobile/model/upload_files_model.dart';
+import 'package:paisa_takatak_mobile/model/upload_files_error_model.dart';
+
+
 class APIService{
 
-  static String baseUrl = 'http://13.232.165.118:8085';
+ // static String baseUrl = 'http://13.232.165.118:8085';
+  //test url
+  static String baseUrl = 'http://65.2.71.71:8085';
   static String baseUrl1 = 'http://13.232.165.118:8085/swagger-ui.html#/';
   static String authorizationToken ='';
   SharedPrefs _sharedPrefs = SharedPrefs();
@@ -51,33 +57,107 @@ class APIService{
 
      authorizationToken = _sharedPrefs.getAuthorizationToken;
 
-     var request = http.MultipartRequest('POST',Uri.parse(baseUrl+'/uploadDocs/uploadCustomerFile/'));
+     if(fileName == 'pan_card'|| fileName == 'aadhar_card_front'|| fileName == 'aadhar_card_back'){
+       var request = http.MultipartRequest('POST',Uri.parse(baseUrl+'/uploadDocs/uploadCustomerFile/'));
 
-     request.headers['Authorization'] =authorizationToken;
-     request.fields['fileName'] = fileName;
-     request.fields['number'] =ph;
+       request.headers['Authorization'] =authorizationToken;
+       request.fields['fileName'] = fileName;
+       request.fields['number'] =ph;
 
-     request.files.add(
-         http.MultipartFile(
-             'files',
-             File(file.path).readAsBytes().asStream(),
-             File(file.path).lengthSync(),
-             filename: file.path.split("/").last
-         )
-     );
+       request.files.add(
+           http.MultipartFile(
+               'files',
+               File(file.path).readAsBytes().asStream(),
+               File(file.path).lengthSync(),
+               filename: file.path.split("/").last
+           )
+       );
 
-     var response = await request.send();
-     print(response.stream);
-     print(response.statusCode);
-     final res = await http.Response.fromStream(response);
-     print('Came after Http post');
-    final validateModel = validateModelFromJson(res.body);
+       var response = await request.send();
+       print(response.stream);
+       print(response.statusCode);
+       final res = await http.Response.fromStream(response);
+       print('Came after Http post');
 
-    print('${res.body}');
-    print('${validateModel.responseStatus}');
+       debugPrint(res.body, wrapWidth: 1024);
+
+       final uploadFileErrorModel = uploadFileErrorModelFromJson(res.body);
+
+       if(!(uploadFileErrorModel.responseObject[0].ocrResponse.responseObject == null)){
+
+         final uploadFileModel = uploadFileModelFromJson(res.body);
+         print('${uploadFileModel.responseStatus}');
+         _returnResponse1(uploadFileModel);
+
+         List ocrList = uploadFileModel.responseObject;
+         ResponseObjectElement responseObjectElement =  ocrList[0];
 
 
-   _returnResponse1(validateModel);
+
+         switch(fileName){
+
+           case 'pan_card':
+             String panNumber = responseObjectElement.ocrResponse.responseObject.result.extractionOutput.idNumber ?? '';
+             String userName = responseObjectElement.ocrResponse.responseObject.result.extractionOutput.nameOnCard ?? '';
+             _sharedPrefs.setPanNumber(panNumber);
+             _sharedPrefs.setUserName(userName);
+             break;
+           case 'aadhar_card_front':
+            String uidNumber = responseObjectElement.ocrResponse.responseObject.result.extractionOutput.idNumber ?? '';
+            String pinCode = responseObjectElement.ocrResponse.responseObject.result.extractionOutput.pincode ?? '';
+            String permanentAddress =  responseObjectElement.ocrResponse.responseObject.result.extractionOutput.address ?? '';
+             _sharedPrefs.setUidNumber(uidNumber);
+             _sharedPrefs.setPermanentAddress(permanentAddress);
+            _sharedPrefs.setPinCode(pinCode);
+             break;
+           case 'aadhar_card_back':
+             break;
+
+           default:
+             break;
+         }
+
+       }else {
+         throw InvalidFileException(msg:"Please upload the valid file");
+       }
+
+
+
+     }else {
+       var request = http.MultipartRequest(
+           'POST', Uri.parse(baseUrl + '/uploadDocs/uploadCustomerFile/'));
+
+       request.headers['Authorization'] = authorizationToken;
+       request.fields['fileName'] = fileName;
+       request.fields['number'] = ph;
+
+       request.files.add(
+           http.MultipartFile(
+               'files',
+               File(file.path).readAsBytes().asStream(),
+               File(file.path).lengthSync(),
+               filename: file.path
+                   .split("/")
+                   .last
+           )
+       );
+
+       var response = await request.send();
+       print(response.stream);
+       print(response.statusCode);
+       final res = await http.Response.fromStream(response);
+       print('Came after Http post');
+
+
+       debugPrint(res.body, wrapWidth: 1024);
+      // final uploadFileModel = uploadFileModelFromJson(res.body);
+      // final uploadFileErrorModel = uploadFileErrorModelFromJson(res.body);
+       //debugPrint('response body :${res.body}');
+      // print('${uploadFileErrorModel.responseStatus}');
+
+
+      // _returnResponse1(uploadFileErrorModel);
+     }
   }
 
 
@@ -183,7 +263,7 @@ class APIService{
 
 
 
-  static _returnResponse1(ValidateModel validateModel){
+  static _returnResponse1(UploadFileModel validateModel){
 
 
     switch(validateModel.responseStatusCode){

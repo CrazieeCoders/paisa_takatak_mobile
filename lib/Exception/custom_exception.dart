@@ -31,3 +31,10 @@ class FetchOtpException extends AppException{
   String msg;
   FetchOtpException({this.msg}):super(msg: msg);
 }
+
+class InvalidFileException extends AppException{
+  String msg;
+  InvalidFileException({this.msg});
+}
+
+

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:paisa_takatak_mobile/Exception/custom_exception.dart';
 import 'package:paisa_takatak_mobile/data/sharedPref.dart';
 import 'package:paisa_takatak_mobile/services/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,13 +28,9 @@ class AgreementBloc extends Bloc<AgreementOtpEvent,AgreementOtpState>{
         yield AgreementOtpLoadingState();
 
         verifyOtp = await apiService.loanAgreementOtp(event.phNo);
-        print("${verifyOtp}");
         yield AgreementSendOtpState(sendOtp:event.phNo);
 
       }else if(event is AgreementVerifyOtpEvent){
-
-        print("${verifyOtp}");
-        print("${event.pin}");
 
         isVerified = checkOtp(verifyOtp:verifyOtp,otp:event.pin);
 
@@ -51,8 +48,9 @@ class AgreementBloc extends Bloc<AgreementOtpEvent,AgreementOtpState>{
         yield AgreementResendOtpSuccessState();
       }
 
+    }on AppException{
+      yield AgreementOtpErrorState(errMsg:"Error communicating with server");
     }catch(e){
-      print('${e.toString()}');
       yield AgreementOtpErrorState(errMsg: e.toString());
     }
   }

@@ -16,9 +16,14 @@ class PanSuccessState extends PanState{
 }
 
 class PanFailureState extends PanState{
+
+  String errMsg;
+
+  PanFailureState({this.errMsg});
+
   @override
   // TODO: implement props
-  List<Object> get props =>[];
+  List<Object> get props =>[errMsg];
 
 }
 

@@ -57,7 +57,6 @@ class _LoanAgreementFormState extends State<LoanAgreementForm> {
           context, '/loanConfirmation', (route) => false,
         );
       } else if (state is AgreementOtpFailureState) {
-        print("Came inside OTp Failure State");
         Fluttertoast.showToast(msg: "Invalid OTP !!",
             toastLength: Toast.LENGTH_LONG
         );
@@ -71,7 +70,6 @@ class _LoanAgreementFormState extends State<LoanAgreementForm> {
       } else if (state is AgreementResendOtpSuccessState) {
         LoadingDialog.hide(context);
       } else {
-        print("came inside else method");
         LoadingDialog.hide(context);
       }
 
@@ -444,7 +442,7 @@ class _OtpFormState extends State<OtpForm> with TickerProviderStateMixin{
                     String pin = verifyOtpMethod();
 
                    if(pin.isEmpty || pin == null || pin == ""){
-                     Fluttertoast.showToast(msg: "please enter otp");
+                     Fluttertoast.showToast(msg: "Please enter OTP");
                          } else {
                      _agreementBloc.add(
                          AgreementVerifyOtpEvent(pin: pin, phNo: widget.phNo));

@@ -16,9 +16,14 @@ class AadhaarFrontSuccessState extends AadhaarFrontState{
 }
 
 class AadhaarFrontFailureState extends AadhaarFrontState{
+
+  String errMsg;
+
+  AadhaarFrontFailureState({this.errMsg});
+
   @override
   // TODO: implement props
-  List<Object> get props =>[];
+  List<Object> get props =>[errMsg];
 
 }
 
