@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paisa_takatak_mobile/bloc/network_bloc/network_bloc.dart';
+import 'package:paisa_takatak_mobile/ui/emi_page.dart';
 import 'package:paisa_takatak_mobile/ui/loan_agreement.dart';
 import 'package:paisa_takatak_mobile/ui/loan_confirmation.dart';
 import 'package:paisa_takatak_mobile/ui/loan_detail_form.dart';
@@ -51,6 +52,7 @@ class MyApp extends StatelessWidget {
                   '/loanAgreement':(context) =>LoanAgreementFormProvider(),
                   '/loanConfirmation':(context) =>LoanConfirmation(),
                   '/paymentPage':(context) =>PaymentPageProvider(),
+                  '/emiPage':(context) =>EmiPage(),
                 },
 
               ),

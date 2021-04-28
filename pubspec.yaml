@@ -69,6 +69,7 @@ flutter:
     - cutouts/POIPOA/
     - cutouts/LoanApplyConfirmation/
     - cutouts/payment/
+    - cutouts/home/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

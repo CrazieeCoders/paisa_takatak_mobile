@@ -10,6 +10,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:paisa_takatak_mobile/model/upload_files_model.dart';
 import 'package:paisa_takatak_mobile/model/upload_files_error_model.dart';
+import 'dart:developer';
 
 
 class APIService{
@@ -79,7 +80,8 @@ class APIService{
        final res = await http.Response.fromStream(response);
        print('Came after Http post');
 
-       debugPrint(res.body, wrapWidth: 1024);
+       debugPrint(res.body, wrapWidth: 4024);
+       log(res.body);
 
        final uploadFileErrorModel = uploadFileErrorModelFromJson(res.body);
 
@@ -104,13 +106,14 @@ class APIService{
              break;
            case 'aadhar_card_front':
             String uidNumber = responseObjectElement.ocrResponse.responseObject.result.extractionOutput.idNumber ?? '';
-            String pinCode = responseObjectElement.ocrResponse.responseObject.result.extractionOutput.pincode ?? '';
-            String permanentAddress =  responseObjectElement.ocrResponse.responseObject.result.extractionOutput.address ?? '';
              _sharedPrefs.setUidNumber(uidNumber);
-             _sharedPrefs.setPermanentAddress(permanentAddress);
-            _sharedPrefs.setPinCode(pinCode);
+
              break;
            case 'aadhar_card_back':
+             String pinCode = responseObjectElement.ocrResponse.responseObject.result.extractionOutput.pincode ?? '';
+             String permanentAddress =  responseObjectElement.ocrResponse.responseObject.result.extractionOutput.address ?? '';
+             _sharedPrefs.setPermanentAddress(permanentAddress);
+             _sharedPrefs.setPinCode(pinCode);
              break;
 
            default:

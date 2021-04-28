@@ -45,7 +45,7 @@ class SplashPage extends StatelessWidget {
           } else if (state is LoanAppProcessSuccessState) {
             LoadingDialog.hide(context);
             Navigator.pushNamedAndRemoveUntil(
-                context, '/paymentPage', (route) => false);
+                context, '/emiPage', (route) => false);
           } else if (state is LoanFormPageState) {
             LoadingDialog.hide(context);
             Navigator.pushNamedAndRemoveUntil(
@@ -152,7 +152,7 @@ class SplashPage extends StatelessWidget {
                             child: Container(
                               height: SizeConfig.heightMultiplier * 9.75,
                               width: SizeConfig.widthMultiplier *19.46,
-                              padding: EdgeInsets.fromLTRB(2.9*w,12.0,2.9*w,1.46*h),
+                              padding: EdgeInsets.fromLTRB(2.9*w,12.0*h,2.9*w,1.46*h),
                               child: CircularProgressIndicator(
                                 backgroundColor: Style.palePurple,
                               ),

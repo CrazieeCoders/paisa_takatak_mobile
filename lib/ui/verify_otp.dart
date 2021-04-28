@@ -81,7 +81,7 @@ class _VerifyOtpState extends State<VerifyOtp> {
               );
             }else if(state is LoanConfirmationPageOtpState){
               LoadingDialog.hide(context);
-              Navigator.pushNamedAndRemoveUntil(context,'/paymentPage', (route) => false,
+              Navigator.pushNamedAndRemoveUntil(context,'/emiPage', (route) => false,
               );
             }else if(state is LoanConfirmationPageOtpState){
               LoadingDialog.hide(context);

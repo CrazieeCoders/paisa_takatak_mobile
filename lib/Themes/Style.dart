@@ -37,6 +37,14 @@ class Style{
 
   );
 
+  static final TextStyle smallButton2TextStyle =TextStyle(
+      color:whiteColor,
+      fontFamily:'Poppins',
+      fontSize:1.25*h,
+      decoration: TextDecoration.none
+
+  );
+
 
   static final TextStyle textStyle1 =TextStyle(
       color:blackTextColor,
