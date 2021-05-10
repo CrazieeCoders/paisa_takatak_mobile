@@ -10,6 +10,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:paisa_takatak_mobile/model/upload_files_model.dart';
 import 'package:paisa_takatak_mobile/model/upload_files_error_model.dart';
+import 'package:paisa_takatak_mobile/model/home_page_model.dart';
 import 'dart:developer';
 
 
@@ -19,11 +20,14 @@ class APIService{
   //test url
   static String baseUrl = 'http://65.2.71.71:8085';
   static String baseUrl1 = 'http://13.232.165.118:8085/swagger-ui.html#/';
+  static String urlForConfirmaationApi ='http://65.2.71.71:8080/api/s/customerdetail';
   static String authorizationToken ='';
   SharedPrefs _sharedPrefs = SharedPrefs();
 
 
-   Future<String> generateOtp(String ph) async{
+
+
+  Future<String> generateOtp(String ph) async{
 
     var res = await  http.post(baseUrl+'/otp/generate?number=$ph');
 
@@ -230,10 +234,38 @@ class APIService{
 
     print(' the response code is :${res.statusCode}');
 
-
-
-
   }
+
+  loanConfirmation() async{
+
+    authorizationToken = _sharedPrefs.getAuthorizationToken;
+    String phNo = _sharedPrefs.getPhone;
+
+    var res = await  http.post(Uri.encodeFull('http://65.2.71.71:8080/api/s/customerdetail/'),headers: {
+      'token':authorizationToken,
+      "content-type": "application/json"
+    },
+      body:json.encode({
+      "customerId":phNo,
+      }),
+    );
+
+    print('${res.statusCode}');
+    if(res.statusCode!=200){
+      throw FetchOtpException(msg: "Error occurred while communicating with server");
+    }
+
+    final homePageModel = homePageModelFromJson(res.body);
+    String username = homePageModel.data.customerName;
+
+    _sharedPrefs.setUserName(username);
+
+    print('${res.body}');
+  }
+
+
+
+
 
 
 
@@ -292,6 +324,8 @@ class APIService{
     }
 
   }
+
+
 
 
 }

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:paisa_takatak_mobile/bloc/network_bloc/network_bloc.dart';
-import 'package:paisa_takatak_mobile/ui/emi_page.dart';
+import 'package:paisa_takatak_mobile/ui/emi_detail_page.dart';
+import 'package:paisa_takatak_mobile/ui/emi_nav_page/account_page.dart';
+import 'file:///C:/Users/jsurulir/AndroidStudioProjects/arsey/paisa_takatak_mobile/lib/ui/emi_nav_page/emi_nav_page.dart';
+import 'file:///C:/Users/jsurulir/AndroidStudioProjects/arsey/paisa_takatak_mobile/lib/ui/emi_nav_page/emi_page.dart';
 import 'package:paisa_takatak_mobile/ui/loan_agreement.dart';
 import 'package:paisa_takatak_mobile/ui/loan_confirmation.dart';
 import 'package:paisa_takatak_mobile/ui/loan_detail_form.dart';
@@ -11,8 +14,8 @@ import 'package:paisa_takatak_mobile/ui/poi_page.dart';
 import 'package:paisa_takatak_mobile/ui/signup_page.dart';
 import 'package:paisa_takatak_mobile/ui/splash_page.dart';
 import 'package:paisa_takatak_mobile/ui/verify_otp.dart';
+import 'package:paisa_takatak_mobile/ui/renew_loan.dart';
 import 'Themes/size_config.dart';
-import 'Widgets/internet_connectivity.dart';
 import 'bloc/network_bloc/network_event.dart';
 import 'data/sharedPref.dart';
 
@@ -50,9 +53,15 @@ class MyApp extends StatelessWidget {
                   '/loanForm':(context) =>LoanFormProvider(),
                   '/loanDetailForm':(context) =>LoanDetailFormProvider(),
                   '/loanAgreement':(context) =>LoanAgreementFormProvider(),
-                  '/loanConfirmation':(context) =>LoanConfirmation(),
+                  '/loanConfirmation':(context) =>LoanConfirmationProvider(),
                   '/paymentPage':(context) =>PaymentPageProvider(),
-                  '/emiPage':(context) =>EmiPage(),
+                   '/emiPage':(context) =>EmiNavPageProvider(),
+                  '/accountPage':(context) =>AccountPage(),
+                  '/emiDetailPage':(context) =>EmiDetail(),
+                  '/renewLoan':(context) =>RenewLoanProvider(),
+
+
+
                 },
 
               ),

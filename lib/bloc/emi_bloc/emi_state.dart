@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:paisa_takatak_mobile/bloc/emi_bloc/emi_event.dart';
+import 'file:///C:/Users/jsurulir/AndroidStudioProjects/arsey/paisa_takatak_mobile/lib/bloc/emi_bloc/emi_event.dart';
 
 abstract class EmiState extends Equatable{
 }

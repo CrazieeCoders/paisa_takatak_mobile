@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:paisa_takatak_mobile/bloc/emi_bloc/emi_event.dart';
+import 'file:///C:/Users/jsurulir/AndroidStudioProjects/arsey/paisa_takatak_mobile/lib/bloc/emi_bloc/emi_event.dart';
 import 'package:paisa_takatak_mobile/bloc/payment_bloc/payment_events.dart';
 import 'package:paisa_takatak_mobile/bloc/payment_bloc/payment_state.dart';
 

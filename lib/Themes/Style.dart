@@ -118,10 +118,50 @@ class Style{
       fontSize:  1.70*h,
       color: Color(0xFF828282)
   );
+
+  static final TextStyle desc3TextStyle = TextStyle(
+      fontFamily: 'Roboto Bold',
+      fontSize:  1.50*h,
+    color: Color(0xFF4F4F4F),
+  );
+
+  static final TextStyle desc4TextStyle = TextStyle(
+    fontFamily: 'Roboto',
+    fontSize:  1.80*h,
+    color: Color(0xFF686868),
+  );
+
+  static final TextStyle desc5TextStyle = TextStyle(
+    fontFamily: 'Roboto',
+    fontSize:  2.80*h,
+    color: Color(0xFF686868),
+  );
+
+  static final TextStyle notificationTextStyle = TextStyle(
+      fontFamily: 'Roboto',
+      fontSize: 1.66*h,
+      color: Color(0xFF4F4F4F),
+      decoration: TextDecoration.none
+  );
+
   static final TextStyle hintTextStyle =  TextStyle(
       fontFamily: 'Roboto',
       fontSize: 1.21*h,
       color: darkPinkColor,
+      decoration: TextDecoration.none
+  );
+
+  static final TextStyle purpleHintTextStyle =  TextStyle(
+      fontFamily: 'Roboto',
+      fontSize: 1.31*h,
+      color: const Color(0xFF1B1C77),
+      decoration: TextDecoration.none
+  );
+
+  static final TextStyle purpleHintBoldTextStyle =  TextStyle(
+      fontFamily: 'Roboto Bold',
+      fontSize: 1.51*h,
+      color: const Color(0xFF1B1C77),
       decoration: TextDecoration.none
   );
 
@@ -153,6 +193,12 @@ class Style{
   static final TextStyle input2TextStyle = TextStyle(
       fontFamily: 'Roboto Bold',
       fontSize: 1.95*h,
+      color: Color(0xFF262222)
+  );
+
+  static final TextStyle input3TextStyle = TextStyle(
+      fontFamily: 'Roboto Bold',
+      fontSize: 1.80*h,
       color: Color(0xFF262222)
   );
 
