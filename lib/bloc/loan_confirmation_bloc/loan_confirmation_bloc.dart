@@ -19,6 +19,7 @@ class LoanConfirmationBloc extends Bloc<LoanConfirmationEvent,LoanConfirmationSt
       try{
         yield LoanConfirmationLoading();
         await apiService.loanConfirmation();
+        await apiService.getProfileDetails();
         yield LoanConfirmationSuccess();
       }catch(e){
         print(e.toString());

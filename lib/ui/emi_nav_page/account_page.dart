@@ -25,13 +25,13 @@ class _AccountPageState extends State<AccountPage> {
 
   TextEditingController nameTextController;
   TextEditingController phTextController;
-  TextEditingController ph2TextController = TextEditingController();
+  TextEditingController ph2TextController;
   TextEditingController addr1TextController;
-  TextEditingController pin1TextController = TextEditingController();
-  TextEditingController addr2TextController = TextEditingController();
-  TextEditingController pin2TextController = TextEditingController();
-  TextEditingController panTextController = TextEditingController();
-  TextEditingController uidTextController = TextEditingController();
+  TextEditingController pin1TextController;
+  TextEditingController addr2TextController;
+  TextEditingController pin2TextController;
+  TextEditingController panTextController;
+  TextEditingController uidTextController;
 
   var maskFormatter = new MaskTextInputFormatter(
       mask: '#### #### ####', filter: {"#": RegExp(r'[0-9]')});
@@ -45,13 +45,15 @@ class _AccountPageState extends State<AccountPage> {
 
   @override
   Widget build(BuildContext context) {
-    nameTextController =
-        TextEditingController(text: '${sharedPrefs.getUserName}');
+    nameTextController = TextEditingController(text: '${sharedPrefs.getUserName}');
     phTextController = TextEditingController(text: '${sharedPrefs.getPhone}');
-    addr1TextController =
-        TextEditingController(text: '${sharedPrefs.getPermanentAddress}');
-    pin1TextController =
-        TextEditingController(text: '${sharedPrefs.getPinCode}');
+    ph2TextController = TextEditingController(text: '${sharedPrefs.getSecondaryPhone}');
+    addr1TextController = TextEditingController(text: '${sharedPrefs.getPermanentAddress}');
+    pin1TextController = TextEditingController(text: '${sharedPrefs.getPinCode}');
+    addr2TextController = TextEditingController(text: '${sharedPrefs.getLocalAddress}');
+    pin2TextController =  TextEditingController(text: '${sharedPrefs.getLocalPinCode}');
+    panTextController = TextEditingController(text: '${sharedPrefs.getPanNumber}');
+    uidTextController = TextEditingController(text: '${sharedPrefs.getUidNumber}');
 
     return Scaffold(
       appBar: AppBar(
@@ -158,7 +160,7 @@ class _AccountPageState extends State<AccountPage> {
                                     width: 67.59 * w,
                                     child: TextFormField(
                                       enabled: nameEdit,
-                                      // readOnly:  true,
+                                       readOnly:  true,
                                       textCapitalization:
                                           TextCapitalization.sentences,
                                       controller: nameTextController,
@@ -185,7 +187,7 @@ class _AccountPageState extends State<AccountPage> {
                 },*/
                                     ),
                                   ),
-                                  Container(
+                                 /* Container(
                                     height: 5.67 * h,
                                     width: 15 * w,
                                     decoration: BoxDecoration(
@@ -206,7 +208,7 @@ class _AccountPageState extends State<AccountPage> {
                                         ),
                                       ),
                                     ),
-                                  ),
+                                  ),*/
                                 ],
                               ),
                             ),
@@ -255,7 +257,7 @@ class _AccountPageState extends State<AccountPage> {
                                       ),
                                     ),
                                   ),
-                                  Container(
+                                 /* Container(
                                     height: 5.67 * h,
                                     width: 15 * w,
                                     decoration: BoxDecoration(
@@ -275,7 +277,7 @@ class _AccountPageState extends State<AccountPage> {
                                         ),
                                       ),
                                     ),
-                                  ),
+                                  ),*/
                                 ],
                               ),
                             ),
@@ -296,6 +298,8 @@ class _AccountPageState extends State<AccountPage> {
                           height: 5.67 * h,
                           width: 87.59 * w,
                           child: TextFormField(
+                            enabled: false,
+                            readOnly:  true,
                             controller: ph2TextController,
                             keyboardType: TextInputType.phone,
                             style: Style.input2TextStyle,
@@ -371,7 +375,7 @@ class _AccountPageState extends State<AccountPage> {
                 },*/
                                       ),
                                     ),
-                                    Container(
+                                 /*   Container(
                                       height: 5.67 * h,
                                       width: 15 * w,
                                       decoration: BoxDecoration(
@@ -392,7 +396,7 @@ class _AccountPageState extends State<AccountPage> {
                                           ),
                                         ),
                                       ),
-                                    ),
+                                    ),*/
                                   ],
                                 )),
                           ],
@@ -470,6 +474,8 @@ class _AccountPageState extends State<AccountPage> {
                           height: 5.67 * h,
                           width: 87.59 * w,
                           child: TextFormField(
+                            enabled: false,
+                            readOnly:  true,
                             textCapitalization: TextCapitalization.sentences,
                             controller: addr2TextController,
                             keyboardType: TextInputType.text,
@@ -481,13 +487,6 @@ class _AccountPageState extends State<AccountPage> {
                               contentPadding: EdgeInsets.fromLTRB(
                                   2.43 * w, 1.21 * h, 2.43 * w, 1.21 * h),
                               border: InputBorder.none,
-                              suffixIcon: Padding(
-                                  padding: EdgeInsets.fromLTRB(
-                                      4.16 * w, 2.10 * h, 4.16 * w, 2.10 * h),
-                                  child: Text(
-                                    'Edit ',
-                                    style: Style.suffixTextStyle,
-                                  )),
                             ),
                             validator: (value) {
                               if (value.isEmpty || value == '') {
@@ -523,6 +522,8 @@ class _AccountPageState extends State<AccountPage> {
                               height: 5.67 * h,
                               width: 68.89 * w,
                               child: TextFormField(
+                                enabled: false,
+                                readOnly:  true,
                                 controller: pin2TextController,
                                 keyboardType: TextInputType.number,
                                 style: TextStyle(
@@ -576,8 +577,9 @@ class _AccountPageState extends State<AccountPage> {
                                 contentPadding: EdgeInsets.fromLTRB(
                                     2.43 * w, 1.21 * h, 2.43 * w, 1.21 * h),
                                 border: InputBorder.none,
-                                hintText: '${sharedPrefs.getPanNumber}',
-                                hintStyle: Style.input2TextStyle),
+                               // hintText: '${sharedPrefs.getPanNumber}',
+                               // hintStyle: Style.input2TextStyle
+                                 ),
                             /*  validator: (value) {
                   if(value == ''){
                   return "Please enter your PAN Card number";
@@ -615,8 +617,9 @@ class _AccountPageState extends State<AccountPage> {
                                 contentPadding: EdgeInsets.fromLTRB(
                                     2.43 * w, 1.21 * h, 2.43 * w, 1.21 * h),
                                 border: InputBorder.none,
-                                hintText: '${sharedPrefs.getUidNumber}',
-                                hintStyle: Style.input2TextStyle),
+                            //    hintText: '${sharedPrefs.getUidNumber}',
+                             //   hintStyle: Style.input2TextStyle
+                            ),
                             /*    validator: (value) {
                    if(value == ''){
                   return 'Please enter your UID';

@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:paisa_takatak_mobile/Exception/custom_exception.dart';
 import 'package:paisa_takatak_mobile/data/sharedPref.dart';
 import 'package:paisa_takatak_mobile/model/household_model.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/foundation.dart';
 import 'package:paisa_takatak_mobile/model/upload_files_model.dart';
 import 'package:paisa_takatak_mobile/model/upload_files_error_model.dart';
 import 'package:paisa_takatak_mobile/model/home_page_model.dart';
+import 'package:paisa_takatak_mobile/model/profile_page_model.dart';
 import 'dart:developer';
 
 
@@ -20,7 +22,7 @@ class APIService{
   //test url
   static String baseUrl = 'http://65.2.71.71:8085';
   static String baseUrl1 = 'http://13.232.165.118:8085/swagger-ui.html#/';
-  static String urlForConfirmaationApi ='http://65.2.71.71:8080/api/s/customerdetail';
+  static String urlForConfirmationApi ='http://65.2.71.71:8080/api/s/customerdetail';
   static String authorizationToken ='';
   SharedPrefs _sharedPrefs = SharedPrefs();
 
@@ -260,8 +262,46 @@ class APIService{
 
     _sharedPrefs.setUserName(username);
 
-    print('${res.body}');
+    //print('${res.body}');
   }
+
+  getProfileDetails() async{
+    authorizationToken = _sharedPrefs.getAuthorizationToken;
+    String phNo = _sharedPrefs.getPhone;
+
+    var headers = {
+      'token':authorizationToken,
+      "content-type": "application/json",
+      'customerId':phNo,
+    };
+
+    final response = await http.get(baseUrl+'/user/profile',headers: headers);
+
+    print('${response.statusCode}');
+   // print('${response.body}');
+    if(response.statusCode!=200){
+      throw FetchOtpException(msg: "Error occurred while communicating with server");
+    }
+
+    final profilePageModel = profilePageModelFromJson(response.body);
+    String secondaryPhNo = profilePageModel.responseObject.secondaryContactNumber;
+    String permAddress = profilePageModel.responseObject.permanentAddress;
+    String localAddress = profilePageModel.responseObject.localAddress;
+    String areaPinCode = profilePageModel.responseObject.areaPinCode;
+    String localPinCode = profilePageModel.responseObject.localPinCode;
+    String panNumber = profilePageModel.responseObject.panNumber;
+    String aadharId = profilePageModel.responseObject.aadharId;
+
+     _sharedPrefs.setSecondaryPhNO(secondaryPhNo);
+    _sharedPrefs.setPermanentAddress(permAddress);
+    _sharedPrefs.setPinCode(areaPinCode);
+    _sharedPrefs.setLocalAddress(localAddress);
+    _sharedPrefs.setLocalPinCode(localPinCode);
+    _sharedPrefs.setPanNumber(panNumber);
+    _sharedPrefs.setUidNumber(aadharId);
+
+  }
+
 
 
 

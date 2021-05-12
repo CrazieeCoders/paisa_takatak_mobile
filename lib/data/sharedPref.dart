@@ -54,7 +54,11 @@ class SharedPrefs{
 
   String  get getPinCode => _sharedPrefs.getString("pinCode")?? 'enter your pin code number';
 
+  String  get getLocalAddress => _sharedPrefs.getString("localAddress")?? 'enter your address';
 
+  String  get getLocalPinCode => _sharedPrefs.getString("localPinCode")?? 'enter your pin code number';
+
+  String  get getSecondaryPhone => _sharedPrefs.getString("secondaryPhNo")?? 'please enter your ph no';
 
   setSelfieStatus(int selfiePhoto){
     _sharedPrefs.setInt('selfieStatus',selfiePhoto);
@@ -130,7 +134,18 @@ class SharedPrefs{
     _sharedPrefs.setString('pinCode',pinCode);
   }
 
+  setLocalAddress(String localAddress){
+    _sharedPrefs.setString('localAddress',localAddress);
+  }
 
+  setLocalPinCode(String localPinCode){
+    _sharedPrefs.setString('localPinCode',localPinCode);
+  }
+
+
+  setSecondaryPhNO(String secondaryPhNo){
+    _sharedPrefs.setString('secondaryPhNo', secondaryPhNo);
+  }
 
 
 

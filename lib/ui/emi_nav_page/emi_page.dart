@@ -6,6 +6,8 @@ import 'package:paisa_takatak_mobile/Widgets/internet_connectivity.dart';
 import 'package:paisa_takatak_mobile/bloc/network_bloc/network_bloc.dart';
 import 'package:paisa_takatak_mobile/bloc/network_bloc/network_state.dart';
 import 'package:paisa_takatak_mobile/data/sharedPref.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class EmiPage extends StatefulWidget {
 
@@ -23,6 +25,46 @@ class _EmiPageState extends State<EmiPage> {
 
   double h = SizeConfig.heightMultiplier;
   double w = SizeConfig.widthMultiplier;
+
+  SharedPrefs _prefs = SharedPrefs();
+
+  Razorpay _razorpay;
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _razorpay = Razorpay();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _razorpay.clear();
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    toastMessage("Payment Success" + response.paymentId);
+
+    toastMessage("Order Successfully Placed");
+   // Navigator.pop(context);
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    toastMessage(
+        "Payment Failure");
+
+   // Navigator.pop(context);
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    toastMessage("External Wallet" + response.walletName);
+  }
 
 
   @override
@@ -214,16 +256,44 @@ class _EmiPageState extends State<EmiPage> {
                         height: 2.43*h,
                       ),
                       Center(
-                        child: Container(
-                          height: 7.09 * h,
-                          width: 82.01 * w,
-                          decoration: BoxDecoration(
-                              color: Style.inkBlueColor,
-                              borderRadius: BorderRadius.circular(5.0)),
-                          child: Center(
-                            child: Text(
-                              'Pay Now',
-                              style: Style.button2TextStyle,
+                        child: GestureDetector(
+                          onTap: (){
+                            var options = {
+                              //testkey
+                              'key': 'rzp_test_lBIPHgjcPs1lk5',
+                              //  'key': 'rzp_live_GFEf91Ekzuy7ZY',
+                              'amount': 5 * 100,
+                              'name': 'Paisa Takatak',
+                              'currency': "INR",
+                              'theme.color': "#55f7c9",
+                              'description': 'EMI ',
+                              'prefill': {
+                                'contact': _prefs.getPhone,
+                                'email': '',
+                              },
+                              'external': {
+                                'wallets': ['paytm']
+                              }
+                            };
+
+                            try {
+                              _razorpay.open(options);
+                            } catch (e) {
+                              debugPrint(e);
+                            }
+                          },
+
+                          child: Container(
+                            height: 7.09 * h,
+                            width: 82.01 * w,
+                            decoration: BoxDecoration(
+                                color: Style.inkBlueColor,
+                                borderRadius: BorderRadius.circular(5.0)),
+                            child: Center(
+                              child: Text(
+                                'Pay Now',
+                                style: Style.button2TextStyle,
+                              ),
                             ),
                           ),
                         ),
@@ -332,5 +402,13 @@ class _EmiPageState extends State<EmiPage> {
         ),
       ),
     );
+  }
+
+  void toastMessage(String message) {
+    Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        fontSize: 16.0);
   }
 }
